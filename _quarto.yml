@@ -18,11 +18,11 @@ website:
             href: ./tidytuesday_exercise.html
     right:
       - icon: github 
-        href: URL-TO-THIS-REPOSITORY-HERE        
+        href: https://github.com/sethlattner/sethlattner-MADA-portfolio.git        
 
 format:
   html:
-    theme: cosmo
+    theme: slate
     highlight: zenburn
     css: styles.css
     toc: FALSE

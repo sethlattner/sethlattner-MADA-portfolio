@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "aboutme.html",
+    "href": "aboutme.html",
+    "title": "About me",
+    "section": "",
+    "text": "Background\nMy name is Seth Lattner and I am originally from Statesboro, GA. I am currently a Master’s Student at the Southeastern Cooperative Wildlife Disease Study, housed in UGA’s College of Veterinary Medicine. Prior to beginning graduate school, I received a BSFR in Wildlife Resources at UGA’s Warnell School of Forestry and Natural Resources. A fun fact about me is that I have an identical twin brother!\n\n\n\nResearch Interests/Experience\nI am currently studying canine distemper virus in wild carnivores of North Carolina. My undergraduate research focused on bat habitat use on a barrier island. Additionally, I assisted in projects studying Guinea Worm Disease and Snake Fungal Disease. I have spent field seasons assisting in research on small mammals and snakes of southwest Georgia.\n\n\n\nCoding/Data Analysis Experience\nI was introduced to R coding and data analysis during my undergraduate coursework/research and have tried to continue improving my proficiency in these areas through graduate coursework. I have a lot to learn, but I am enjoying the process. I am interested in working with GitHub and Quarto, as I have no prior experience with these tools.\nI am excited about the start-to-finish approach to data management and analysis in this course. My goal is to learn and practice using tools and techniques to streamline my data management and analysis that I can then use in my own research.\n\n\nmicroshades R Package\nWhile I myself am not colorblind, using color palettes that are accessible to colorblind individuals is of growing interest in the scientific community. A relatively recent publication from ASM in the journal Microbiology Resource Announcements details a new R package, named microshades, that provides a wide range of colorblind-accessible color options for use in microbiome data visualization, as well as some other useful functions."
+  },
+  {
+    "objectID": "coding_exercise.html",
+    "href": "coding_exercise.html",
+    "title": "R Coding Exercise",
+    "section": "",
+    "text": "Placeholder file for the future R coding exercise."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Seth Lattner",
+    "section": "",
+    "text": "Welcome to my website and data analysis portfolio.\n\nPlease use the Menu Bar above to look around.\nHave fun!"
+  },
+  {
+    "objectID": "tidytuesday_exercise.html",
+    "href": "tidytuesday_exercise.html",
+    "title": "Tidy Tuesday Exercise",
+    "section": "",
+    "text": "Placeholder file for the future Tidy Tuesday exercise."
+  },
+  {
+    "objectID": "visualization_exercise.html",
+    "href": "visualization_exercise.html",
+    "title": "Visualization Exercise",
+    "section": "",
+    "text": "Placeholder file for the future visualization exercise."
+  }
+]
