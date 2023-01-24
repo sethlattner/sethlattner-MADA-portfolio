@@ -1,39 +1,15 @@
----
-title: "R Coding Exercise"
-author: "Seth Lattner"
-output:
-  html_document:
-    toc: FALSE
----
+install.packages("rmarkdown")
 
-### Loading/Examining Data
-First, I want to take a look at the gapminder data I will be using from the 'dslabs' package.
-
-```{r, warning=FALSE, message=FALSE}
-## load required packages
-library(tidyverse)
+#load required packages
 library(dslabs)
+library(tidyverse)
 library(ggplot2)
-```
 
-```{r}
 #examine gapminder data frame
 help("gapminder")
-
-#examine data structure
 str(gapminder)
-
-#look at summary of data
 summary(gapminder)
-
-#examine object type
 class(gapminder)
-```
-
-### Processing Data
-Now, I want to look closer at the African countries from the gapminder dataframe. I also want to look specifically at a few variables, so I will pull those out into new objects.
-
-```{r}
 
 #select only African countries
 africadata <-
@@ -46,13 +22,7 @@ summary(obj1)
 obj2<-subset(africadata, select = c(population, life_expectancy))
 str(obj2)
 summary(obj2)
-```
 
-### Plotting Data
-
-Now I want to plot the data from the African countries to visualize any trends. 
-
-```{r, warning=FALSE}
 #plot life exp as a func of inf mortality
 ggplot(data = obj1, aes(infant_mortality, life_expectancy))+
   geom_point(cex=3, alpha=0.3)+
@@ -61,33 +31,25 @@ ggplot(data = obj1, aes(infant_mortality, life_expectancy))+
   ylim(0,85)+
   theme_classic()
 
+
 #plot life exp as a func of population size
 ggplot(data = obj2, aes(log(population), life_expectancy))+
   geom_point(cex=3, alpha=0.3)+
   ylab("Life Expectancy (Yrs)")+
   xlab(expression("Log"[e]*"(Population)"))+
   theme_classic()
-```
 
-### More Processing
-These plots are pretty messy, since each country was sampled across numerous years. To clean this up, I want to first find missing values in the dataset.
-
-```{r}
-#find missing values for infant mortality, then the years in which the data is missing
+#find missing values in infant mortality
 missing<-is.na(africadata$infant_mortality)
 missing_years<-africadata$year[missing]
 missing_years
-```
 
-### More Plotting
-Now that I've found what years contain missing values for infant mortality, I am going to select a year without missing data points (2000) and recreate the plots from earlier using only data from that year.
-
-```{r}
-#created new object with only data from year 2000
 africadata2000<-
   filter(africadata, year=="2000")
 
-#plot life exp as a func of inf mortality for year 2000
+#plot using only data from 2000
+
+#plot life exp as a func of inf mortality for the year 2000
 ggplot(data = africadata2000, aes(infant_mortality, life_expectancy))+
   geom_point(cex=3, alpha=0.3)+
   ylab("Life Expectancy (Yrs)")+
@@ -95,24 +57,16 @@ ggplot(data = africadata2000, aes(infant_mortality, life_expectancy))+
   ylim(0,85)+
   theme_classic()
 
-#plot life exp as a func of population size for year 2000
+#plot life exp as a func of population size for the year 2000
 ggplot(data = africadata2000, aes(log(population), life_expectancy))+
   geom_point(cex=3, alpha=0.3)+
   ylab("Life Expectancy (Yrs)")+
   xlab(expression("Log"[e]*"(Population)"))+
   theme_classic()
-```
 
-### Statistical Analysis
-Finally, I want to fit a linear regression to both of these functions to determine if there is any statistical significance.
-
-```{r}
 #fit linear regression to both plotted functions
 fit1<-lm(life_expectancy~infant_mortality, data = africadata2000)
 summary(fit1)
 
 fit2<-lm(life_expectancy~population, data = africadata2000)
 summary(fit2)
-```
-
-Based on these results, I can conclude that there is a significant negative effect of infant mortality on life expectancy (*p* = 2.83e-08) and that population size had no significant effect on life expectancy (*p* = 0.616).
