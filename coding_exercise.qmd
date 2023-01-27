@@ -79,6 +79,17 @@ missing_years<-africadata$year[missing]
 missing_years
 ```
 
+### Added by BETELIHEM G. 
+### The above code creates a long list, how about only looking at unique missing numbers to narrow down the list and make it a bit easier
+```{r}
+missing_years_unique<-unique(missing_years)
+```
+### Added by BETELIHEM G, then print to view 
+```{r}
+print(missing_years_unique)
+```
+
+
 ### More Plotting
 Now that I've found what years contain missing values for infant mortality, I am going to select a year without missing data points (2000) and recreate the plots from earlier using only data from that year.
 
