@@ -473,6 +473,62 @@ F-statistic: 0.2549 on 1 and 49 DF,  p-value: 0.6159</code></pre>
 </div>
 </div>
 <p>Based on these results, I can conclude that there is a significant negative effect of infant mortality on life expectancy (<em>p</em> = 2.83e-08) and that population size had no significant effect on life expectancy (<em>p</em> = 0.616).</p>
+</section>
+<section id="the-following-was-added-by-vijay-panthayi" class="level3">
+<h3 class="anchored" data-anchor-id="the-following-was-added-by-vijay-panthayi">The following was added by Vijay Panthayi</h3>
+<p>Let’s see if we can do anything else interesting with the africadata data set.</p>
+<p>Let’s plot the GDP of each African country as a function of the country’s respective fertility (average number of children per woman).</p>
+<p>First, we want to remove any data value that is missing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>missinggdp <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(africadata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, let’s create the plot with the new data set that removed all missing gdp values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>missinggdp, <span class="fu">aes</span>(<span class="at">x=</span>fertility, <span class="at">y=</span>gdp)) <span class="sc">+</span><span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>, <span class="at">shape=</span><span class="dv">23</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="coding_exercise_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It appears that generally, higher GDP occurs with lower fertility rates, however, the number of data points that show that is far lower than the mass at the bottom which tends to show that gdp and fertility rates have no correlation.</p>
+<p>Let’s run a linear regression fit on the data to see if there is a trend in the data mathematically.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fitgdp <span class="ot">&lt;-</span> <span class="fu">lm</span>(gdp<span class="sc">~</span>fertility, <span class="at">data =</span> missinggdp)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fitgdp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = gdp ~ fertility, data = missinggdp)
+
+Residuals:
+       Min         1Q     Median         3Q        Max 
+-3.128e+10 -8.340e+09 -2.807e+09  2.178e+09  1.634e+11 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  4.500e+10  1.833e+09   24.56   &lt;2e-16 ***
+fertility   -6.097e+09  3.037e+08  -20.08   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.998e+10 on 2201 degrees of freedom
+Multiple R-squared:  0.1548,    Adjusted R-squared:  0.1544 
+F-statistic: 403.1 on 1 and 2201 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fitgdp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="coding_exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="coding_exercise_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="coding_exercise_files/figure-html/unnamed-chunk-12-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="coding_exercise_files/figure-html/unnamed-chunk-12-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on these results, it is probable that there is no correlation between fertility and gdp. It appears that with a p-value of 2.2e-16, gdp is low regardless of fertility.</p>
 
 
 </section>
