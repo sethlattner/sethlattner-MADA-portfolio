@@ -127,3 +127,33 @@ summary(fit2)
 ```
 
 Based on these results, I can conclude that there is a significant negative effect of infant mortality on life expectancy (*p* = 2.83e-08) and that population size had no significant effect on life expectancy (*p* = 0.616).
+
+### The following was added by Vijay Panthayi
+
+Let's see if we can do anything else interesting with the africadata data set.
+
+Let's plot the GDP of each African country as a function of the country's respective fertility (average number of children per woman).
+
+First, we want to remove any data value that is missing.
+
+```{r}
+missinggdp <- na.omit(africadata)
+```
+
+Next, let's create the plot with the new data set that removed all missing gdp values.
+
+```{r}
+ggplot(data=missinggdp, aes(x=fertility, y=gdp)) +geom_point(size=2, shape=23)
+```
+
+It appears that generally, higher GDP occurs with lower fertility rates, however, the number of data points that show that is far lower than the mass at the bottom which tends to show that gdp and fertility rates have no correlation. 
+
+Let's run a linear regression fit on the data to see if there is a trend in the data mathematically.
+
+```{r}
+fitgdp <- lm(gdp~fertility, data = missinggdp)
+summary(fitgdp)
+plot(fitgdp)
+```
+
+Based on these results, it is probable that there is no correlation between fertility and gdp. It appears that with a p-value of 2.2e-16, gdp is low regardless of fertility.
