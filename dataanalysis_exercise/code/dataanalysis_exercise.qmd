@@ -55,13 +55,18 @@ glimpse(grouped_data)
 Now that these variables are reclassified, I want to change the NA's in a few columns to 0's, which is more indicative of their actual value.
 
 ```{r}
-BEAM_data <- BEAM_data %>%
+BEAM_data_clean <- BEAM_data %>%
   replace(is.na(BEAM_data), 0)
 
-glimpse(BEAM_data)
+glimpse(BEAM_data_clean)
 ```
 
 That will conclude the data cleaning I will be conducting. Perhaps more wrangling could have been done, but I think this is a good start and sets up some the next contributor fairly well.
+
+```{r}
+#save processed data
+BEAM_data_clean %>% saveRDS(here::here("dataanalysis_exercise", "data", "BEAM_data_clean.rds"))
+```
 
 ### Exploring the Data
 
@@ -70,7 +75,7 @@ Now that the data is clean, I want to do some quick exploration of it before han
 The following plots will help give a simple overview of what the data looks like without getting into any modeling.
 
 ```{r, message= FALSE, warning=FALSE}
-ggplot(BEAM_data, aes(Pathogen, Number_of_isolates, color=Pathogen))+
+ggplot(BEAM_data_clean, aes(Pathogen, Number_of_isolates, color=Pathogen))+
   geom_col()+
   labs(title = "Total Number of Isolates from Each Pathogen Type")+
   xlab("Pathogen Type")+
