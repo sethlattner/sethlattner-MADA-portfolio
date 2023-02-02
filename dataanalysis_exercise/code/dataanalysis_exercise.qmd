@@ -1,0 +1,99 @@
+---
+title: "Data Analysis Exercise"
+subtitle: "BEAM Dashboard"
+author: Seth Lattner
+editor: visual
+output:
+  html_document:
+    toc: FALSE
+---
+
+### About the Data
+
+This [dataset](https://data.cdc.gov/Foodborne-Waterborne-and-Related-Diseases/BEAM-Dashboard-Report-Data/jbhn-e8xn) is part of the **BEAM (Bacteria, Enterics, Amoeba, and Mycotics) Dashboard**, collected by the System for Enteric Disease Response, Investigation, and Coordination (SEDRIC). It contains information on food- and water-borne pathogens circulating in the United States.
+
+### Loading Data
+
+```{r, message=FALSE, warning=FALSE}
+#load required packages
+library(tidyverse)
+library(here)
+library(zoo)
+```
+
+```{r}
+#load data
+BEAM_data <- read_csv(here("dataanalysis_exercise", "data", "BEAM_Dashboard_-_Report_Data.csv"))
+glimpse(BEAM_data)
+```
+
+### Data Cleaning
+
+Now that we have the data loaded, let's tidy it up to get it ready for analysis. Thankfully, this is a relatively clean dataset, so wrangling it shouldn't be too difficult.
+
+First, I'm going to reclassify the categorical variables.
+
+```{r}
+BEAM_data <- BEAM_data %>%
+  mutate(State = as.factor(State)) %>%
+  mutate(Source = as.factor(Source)) %>%
+  mutate(Pathogen = as.factor(Pathogen)) %>%
+  mutate(`Serotype/Species` = as.factor(`Serotype/Species`))
+
+glimpse(BEAM_data)  
+```
+
+I also want to group the total number of isolates of each pathogen for each year. This will help simplify the results and can be used for further analysis.
+
+```{r}
+grouped_data <- BEAM_data %>%
+  group_by(Year, Pathogen) %>%
+  summarise(sum_isolates = sum(Number_of_isolates), .groups = 'drop')
+glimpse(grouped_data)
+```
+
+Now that these variables are reclassified, I want to change the NA's in a few columns to 0's, which is more indicative of their actual value.
+
+```{r}
+BEAM_data <- BEAM_data %>%
+  replace(is.na(BEAM_data), 0)
+
+glimpse(BEAM_data)
+```
+
+That will conclude the data cleaning I will be conducting. Perhaps more wrangling could have been done, but I think this is a good start and sets up some the next contributor fairly well.
+
+### Exploring the Data
+
+Now that the data is clean, I want to do some quick exploration of it before handing it off to the next contributor for a more complete analysis.
+
+The following plots will help give a simple overview of what the data looks like without getting into any modeling.
+
+```{r, message= FALSE, warning=FALSE}
+ggplot(BEAM_data, aes(Pathogen, Number_of_isolates, color=Pathogen))+
+  geom_col()+
+  labs(title = "Total Number of Isolates from Each Pathogen Type")+
+  xlab("Pathogen Type")+
+  ylab("Number of Isolates")+
+  theme_classic()+
+  theme(legend.position = "none")
+
+ggplot(grouped_data, aes(Year, sum_isolates, color=Pathogen))+
+ geom_smooth()+
+  labs(title = "Total Number of Isolates for Each Pathogen, 2017-2022")+
+  xlab("Year")+
+  ylab("Number of isolates")+
+  theme_classic()
+```
+
+### Data Analysis
+
+There are many interesting questions that can be answered with this dataset. Among these, I am interested in:
+
+-   The relationship between source and pathogen type and/or number of isolates
+
+-   The relationship between serovar/species and outbreak association and/or number of new multistate outbreaks
+
+-   The impact of state/year on the number of new multistate outbreaks
+
+However, this dataset could be used to address many other questions, and I will leave that to the next contributor's judgement. Looking forward to seeing how this data will be analyzed!
