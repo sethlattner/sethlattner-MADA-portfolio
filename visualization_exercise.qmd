@@ -1,8 +1,223 @@
 ---
 title: "Visualization Exercise"
+subtitle: "NBA Win Percentages"
+author: "Seth Lattner"
 output:
   html_document:
     toc: FALSE
 ---
 
-Placeholder file for the future visualization exercise.
+### About the Data
+
+This dataset comes from FiveThirtyEight's article, ["Every NBA Team’s Chance Of Winning In Every Minute Across Every Game"](https://fivethirtyeight.com/features/every-nba-teams-chance-of-winning-in-every-minute-across-every-game/). The article analyzes each NBA team's chance of winning at every minute of a game, averaged across the entire season. The data are available on [GitHub](https://github.com/fivethirtyeight/data/tree/master/nba-winprobs). Below is a static image of the interactive figure that I will be attempting to recreate.
+
+![](nba_win.png)
+
+### Loading/Cleaning the Data
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(here)
+library(ggplot2)
+library(plotly)
+library(shiny)
+library(ggthemes)
+```
+
+```{r, message=FALSE}
+nba_data <- read_tsv(here::here("visualization_exercise", "data", "nba.tsv"))
+head(nba_data)
+```
+
+I will have to reorganize the variables to allow for easier analysis and plotting. Currently, winning percentages are listed for each team at each minute of the game, with the corresponding column labeled after that minute (`0`, `1`, `2`,...`48`). I will need to tidy this to create new columns for minute and win percentage. Once completed, I should have three variables - team, minute, and win percentage.
+
+```{r}
+nba_data <- nba_data %>%
+  tidyr::pivot_longer(!team,
+    names_to = "minute",
+    names_prefix = "min",
+    values_to = "win_percentage",
+    values_drop_na = TRUE ) %>%
+  dplyr::mutate(minute, as.numeric(minute))
+
+nba_data
+```
+
+### Plotting
+
+I want to create a color palette similar to what was used in the original figure (not aiming for complete accuracy). I will try to match the teams with their corresponding team color. 
+
+```{r}
+nba_colors <- c("red2", "darkgreen", "firebrick2", "firebrick4", "green4", "red1", "#336699", "#000999", "#CC0000", "#009999", "#003399", "#660099", "#FF6600", "#FFF000", "#0066FF", "#0033CC", "black", "#66CCFF", "#000666", "midnightblue", "#FF3333", "firebrick", "red", "gray40", "#FF6633", "#6699FF", "#003366", "red3", "royalblue3", "dodgerblue4")
+```
+
+Before trying to recreate the interactive portion of the plot, I want to plot a static version to make sure everything looks the way it should. 
+
+```{r}
+nba_plot <- ggplot(nba_data, aes(`as.numeric(minute)`, win_percentage, color = team))+
+  geom_line(size=0.5)+
+  geom_hline(yintercept = 0.5, size=0.5, color = "black")+
+  theme(axis.line.x = element_blank(),
+       axis.line.y = element_blank(),
+       axis.text = element_text(size = 12))+
+  theme(plot.title = element_text(size = 12))+
+  theme(panel.grid = element_line(colour = "gray80"),
+        plot.background = element_rect(fill = "gray90" ),
+        panel.background = element_rect(fill = "gray90"),
+        panel.grid.minor = element_blank(),
+        legend.key = element_rect(fill = "gray90"),
+        legend.background = element_rect(fill = "gray90"))+
+  scale_color_manual(values = nba_colors)+
+  scale_x_continuous(breaks = c(0, 12, 24, 36, 48), 
+        labels = c("Start", "2nd Qtr", "3rd Qtr", "4th Qtr", "End"))+
+  scale_y_continuous(breaks = c(.2, .3, .4, .5, .6, .7, .8), 
+        labels = c("20", "30", "40", "50", "60", "70", "80%"))+
+  xlab("")+
+  ylab("")+
+  ggtitle("The average chance of the -- winning at any\npoint in a game this year")
+nba_plot
+```
+
+That looks pretty good, but now I want to make the same figure but in an interactive format to match the original. This is not something I have done before, so I will be learning as I go. It seems like the most simple way is to convert the ggplot into an interactive plotly figure using the function `plotly::ggplotly`. 
+
+```{r}
+ggplotly(nba_plot)
+```
+
+This was a straightfoward solution, but I would still like to find a way to include the dropdown selection tool from the original FiveThirtyEight figure.
+
+
+```{r}
+#select some plotly buttons to remove
+remove_buttons <- list('zoom2d','pan2d','lasso2d', 'select2d','zoomIn2d',
+                              'zoomOut2d','autoScale2d','hoverClosestCartesian',
+                              'toggleSpikelines','hoverCompareCartesian')
+
+#replot and filter for team
+nba_plotly <- ggplotly(nba_plot, autosize = F, width = 650, height = 550, 
+         transforms = list(
+      list(
+        type = 'filter',
+        target = ~team,
+        operation = '=',
+        value = unique(nba_data$team)[1])))
+
+#remove some buttons to de-clutter
+nba_plotly <- nba_plotly %>%
+  config(displaylogo = FALSE, modeBarButtonsToRemove = remove_buttons) 
+
+#remove legend and create dropdown list, this is painful 
+nba_plotly <- nba_plotly %>%
+    layout(showlegend = FALSE,
+    updatemenus = list(
+      list(
+        type = 'dropdown',
+        active = 0,
+        buttons = list(
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[1]),
+               label = unique(nba_data$team)[1]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[2]),
+               label = unique(nba_data$team)[2]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[3]),
+               label = unique(nba_data$team)[3]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[4]),
+               label = unique(nba_data$team)[4]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[5]),
+               label = unique(nba_data$team)[5]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[6]),
+               label = unique(nba_data$team)[6]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[7]),
+               label = unique(nba_data$team)[7]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[8]),
+               label = unique(nba_data$team)[8]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[9]),
+               label = unique(nba_data$team)[9]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[10]),
+               label = unique(nba_data$team)[10]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[11]),
+               label = unique(nba_data$team)[11]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[12]),
+               label = unique(nba_data$team)[12]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[13]),
+               label = unique(nba_data$team)[13]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[14]),
+               label = unique(nba_data$team)[14]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[15]),
+               label = unique(nba_data$team)[15]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[16]),
+               label = unique(nba_data$team)[16]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[17]),
+               label = unique(nba_data$team)[17]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[18]),
+               label = unique(nba_data$team)[18]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[19]),
+               label = unique(nba_data$team)[19]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[20]),
+               label = unique(nba_data$team)[20]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[21]),
+               label = unique(nba_data$team)[21]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[22]),
+               label = unique(nba_data$team)[22]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[23]),
+               label = unique(nba_data$team)[23]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[23]),
+               label = unique(nba_data$team)[23]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[24]),
+               label = unique(nba_data$team)[24]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[25]),
+               label = unique(nba_data$team)[25]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[26]),
+               label = unique(nba_data$team)[26]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[27]),
+               label = unique(nba_data$team)[27]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[28]),
+               label = unique(nba_data$team)[28]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[29]),
+               label = unique(nba_data$team)[29]),
+          list(method = "restyle",
+               args = list("transforms[0].value", unique(nba_data$team)[30]),
+               label = unique(nba_data$team)[30])
+        )
+      )
+    )
+  )
+         
+nba_plotly  
+```
+
+### Final Thoughts
+
+I was successful at creating a dropdown menu, but was unable to actually link it to the figure in a way that made it functional. There also must be an easier way to create the dropdown list without having to code an argument for each team individually, but I can't find it. 
+
+Some tools I referenced when completing this exercise where the books [**Interactive Web-Based Data Visualization with R, Plotly, and Shiny**](https://plotly-r.com/index.html) and [**The Epidemiologist R Handbook**](https://epirhandbook.com/en/index.html), along with various webpages and coding forums. The books both contain very helpful information on many aspects of data visualization, including making interactive figures. 
+
