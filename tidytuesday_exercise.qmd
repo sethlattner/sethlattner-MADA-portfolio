@@ -5,4 +5,77 @@ output:
     toc: FALSE
 ---
 
-Placeholder file for the future Tidy Tuesday exercise.
+This exercise includes data from the Hollywood Age Gaps [tidytuesday](https://github.com/rfordatascience/tidytuesday) dataset.\
+
+#### Load Packages/Data
+
+```{r, message=FALSE, warning=FALSE}
+#load packages
+library(tidyverse)
+library(here)
+library(lubridate)
+```
+
+
+```{r}
+# load in data
+age_gaps <- read_csv(here::here("tidytuesday_exercise", "data", "age_gaps.csv"))
+glimpse(age_gaps)
+```
+
+#### Clean/Explore Data
+
+This dataset is pretty clean to start, so I will jump straight into plotting to see if this reveals any interesting trends off the bat. First, I want to plot the age differences by release year. 
+
+```{r}
+ggplot(data = age_gaps)+
+  geom_point(aes(release_year, age_difference), cex=2, alpha=0.3)+
+  labs(x="Release Year", y="Age Difference (Years)", title = "Age Difference Between Main Characters by Release Year")+
+  theme_bw()
+```
+
+This is a little cluttered, as there are many entries per year in this dataset. I want to look at the average age gap for each year and see if they are changing over time. 
+
+```{r, message=FALSE, warning=FALSE}
+avg_age_gaps <- age_gaps %>%
+  group_by(release_year) %>%
+  summarize(mean_gap = mean(age_difference))
+
+avg_age_gaps %>%
+ggplot(aes(release_year, mean_gap))+
+  geom_point( cex=2)+
+  labs(x="Release Year", y="Mean Age Gap (Years)", title = "Mean Age Gap by Release Year")+
+  geom_smooth(method = "lm", color = "red")+
+  theme_bw()
+```
+
+It seems like the average age difference between characters 1 and 2 are decreasing over time, but I take a look at how many movies are included for each year in this dataset.
+
+```{r, warning=FALSE}
+tot_by_year <- age_gaps %>%
+group_by(release_year) %>%
+  count(age_gaps$movie_names)
+
+tot_by_year %>%
+  ggplot(aes(release_year, n))+
+  geom_line(cex=1.5)+
+  labs(title = "Total Number of Movies by Release Year", 
+       subtitle = "Age Gap Dataset", x="Release Year", y="Number of Releases")+
+  theme_bw()
+```
+
+As we can see, there is quite a bit of variation in how many movies are included per release year in this dataset, with many more being included from more recent release years. This is definitely something that would have to be taken into consideration during any further analysis.
+
+Lastly, I want to look at differences in gender for both character 1 and 2. 
+
+```{r}
+gender_c1 <- age_gaps %>%
+  count(character_1_gender)
+gender_c1
+
+gender_c2 <- age_gaps %>%
+  count(character_2_gender)
+gender_c2
+```
+
+
