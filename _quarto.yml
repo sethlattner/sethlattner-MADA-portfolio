@@ -25,7 +25,7 @@ website:
           - text: "Exploration"
             href: ./fluanalysis/code/exploration.html
           - text: "Fitting"
-            href: ./fluanalyis/code/fitting.html
+            href: ./fluanalysis/code/fitting.html
     right:
       - icon: github 
         href: https://github.com/sethlattner/sethlattner-MADA-portfolio.git        
