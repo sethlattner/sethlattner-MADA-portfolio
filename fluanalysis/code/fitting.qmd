@@ -15,10 +15,9 @@ This is the final file of a three part data analysis exercise, conducted on the 
 #load necessary packages
 library(tidyverse)
 library(tidymodels)
-library(ggplot2)
+library(kableExtra)
 library(here)
 library(performance)
-library(vip)
 ```
 
 ```{r, message=FALSE}
@@ -26,4 +25,70 @@ library(vip)
 flu_data <- readRDS(here::here("fluanalysis", "data", "flu_data_clean.RDS"))
 glimpse(flu_data)
 ```
+
+### Model Fitting
+
+#### Body Temperature
+
+First, I want to fit a linear regression model using our first outcome of interest, body temperature, and a single predictor variable, runny nose.
+
+```{r}
+flu_lm1 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(BodyTemp ~ RunnyNose, data = flu_data)
+kableExtra::kable(tidy(flu_lm1)) %>%
+  kableExtra::kable_classic(full_width = FALSE, font = "Arial")
+glance(flu_lm1)
+```
+
+Based on the R-squared value and the RMSE, this does not seem to be a great fit to the data. I want to throw in all of the other variables into a global model and see if this does a better job of explaining the data than the first model.
+
+```{r}
+flu_lm2 <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(BodyTemp ~ . , data = flu_data)
+kableExtra::kable(tidy(flu_lm2)) %>%
+  kableExtra::kable_classic(full_width = FALSE, font = "Arial")
+glance(flu_lm2)
+```
+
+Let's compare these models side-by-side.
+
+```{r}
+compare_performance(flu_lm1, flu_lm2)
+```
+
+Even though it is not a great fit to the data (R-squared = 0.13), the global model is better at explaining the data than the first model based on R-sq and RMSE (as well as AIC).
+
+#### Nausea
+
+Now, I want to fit a logistic regression model using our second outcome of interest, nausea, with a single predictor variable, runny nose.
+
+```{r}
+flu_glm1 <- logistic_reg() %>%
+  set_engine("glm") %>%
+  fit(Nausea ~ RunnyNose, data = flu_data)
+kableExtra::kable(tidy(flu_glm1)) %>%
+  kableExtra::kable_classic(full_width = FALSE, font = "Arial")
+glance(flu_glm1)
+```
+
+Same as before, I want to fit a global model using nausea and all of the other variables in the dataset and compare it to the first model.
+
+```{r}
+flu_glm2 <- logistic_reg() %>%
+  set_engine("glm") %>%
+  fit(Nausea ~ . , data = flu_data)
+kableExtra::kable(tidy(flu_glm2)) %>%
+  kableExtra::kable_classic(full_width = FALSE, font = "Arial")
+glance(flu_glm2)
+```
+
+Let's see which model is a better fit.
+
+```{r}
+compare_performance(flu_glm1, flu_glm2)
+```
+
+Once again, the global model was better at explaining the data than the univariate model. 
 

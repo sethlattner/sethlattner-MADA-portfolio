@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Seth Lattner">
+
+<title>My Data Analysis Portfolio - Flu Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+<script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Data Analysis Portfolio</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../.././aboutme.html">
+ <span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
+        <li>
+    <a class="dropdown-item" href="../.././coding_exercise.html">
+ <span class="dropdown-text">R Coding Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././dataanalysis_exercise/code/dataanalysis_exercise.html">
+ <span class="dropdown-text">Data Analysis Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././visualization_exercise.html">
+ <span class="dropdown-text">Visualization Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././tidytuesday_exercise.html">
+ <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/sethlattner/sethlattner-MADA-portfolio.git"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Flu Analysis</h1>
+<p class="subtitle lead">Fitting</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Seth Lattner </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This is the final file of a three part data analysis exercise, conducted on the dataset from McKay et al 2020, found <a href="https://doi.org/10.5061/dryad.51c59zw4v">here</a>. This file contains data analysis and model fitting.</p>
+<section id="load-datapackages" class="level4">
+<h4 class="anchored" data-anchor-id="load-datapackages">Load Data/Packages</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load necessary packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load and view data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>flu_data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"fluanalysis"</span>, <span class="st">"data"</span>, <span class="st">"flu_data_clean.RDS"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(flu_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 730
+Columns: 32
+$ SwollenLymphNodes &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, No, No, No, Yes, No, Yes, Y…
+$ ChestCongestion   &lt;fct&gt; No, Yes, Yes, Yes, No, No, No, Yes, Yes, Yes, Yes, Y…
+$ ChillsSweats      &lt;fct&gt; No, No, Yes, Yes, Yes, Yes, Yes, Yes, Yes, No, Yes, …
+$ NasalCongestion   &lt;fct&gt; No, Yes, Yes, Yes, No, No, No, Yes, Yes, Yes, Yes, Y…
+$ CoughYN           &lt;fct&gt; Yes, Yes, No, Yes, No, Yes, Yes, Yes, Yes, Yes, No, …
+$ Sneeze            &lt;fct&gt; No, No, Yes, Yes, No, Yes, No, Yes, No, No, No, No, …
+$ Fatigue           &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Ye…
+$ SubjectiveFever   &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, No, Yes…
+$ Headache          &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, Yes, No, Yes, Yes, Yes, Yes…
+$ Weakness          &lt;fct&gt; Mild, Severe, Severe, Severe, Moderate, Moderate, Mi…
+$ WeaknessYN        &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Ye…
+$ CoughIntensity    &lt;fct&gt; Severe, Severe, Mild, Moderate, None, Moderate, Seve…
+$ CoughYN2          &lt;fct&gt; Yes, Yes, Yes, Yes, No, Yes, Yes, Yes, Yes, Yes, Yes…
+$ Myalgia           &lt;fct&gt; Mild, Severe, Severe, Severe, Mild, Moderate, Mild, …
+$ MyalgiaYN         &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Yes, Ye…
+$ RunnyNose         &lt;fct&gt; No, No, Yes, Yes, No, No, Yes, Yes, Yes, Yes, No, No…
+$ AbPain            &lt;fct&gt; No, No, Yes, No, No, No, No, No, No, No, Yes, Yes, N…
+$ ChestPain         &lt;fct&gt; No, No, Yes, No, No, Yes, Yes, No, No, No, No, Yes, …
+$ Diarrhea          &lt;fct&gt; No, No, No, No, No, Yes, No, No, No, No, No, No, No,…
+$ EyePn             &lt;fct&gt; No, No, No, No, Yes, No, No, No, No, No, Yes, No, Ye…
+$ Insomnia          &lt;fct&gt; No, No, Yes, Yes, Yes, No, No, Yes, Yes, Yes, Yes, Y…
+$ ItchyEye          &lt;fct&gt; No, No, No, No, No, No, No, No, No, No, No, No, Yes,…
+$ Nausea            &lt;fct&gt; No, No, Yes, Yes, Yes, Yes, No, No, Yes, Yes, Yes, Y…
+$ EarPn             &lt;fct&gt; No, Yes, No, Yes, No, No, No, No, No, No, No, Yes, Y…
+$ Hearing           &lt;fct&gt; No, Yes, No, No, No, No, No, No, No, No, No, No, No,…
+$ Pharyngitis       &lt;fct&gt; Yes, Yes, Yes, Yes, Yes, Yes, Yes, No, No, No, Yes, …
+$ Breathless        &lt;fct&gt; No, No, Yes, No, No, Yes, No, No, No, Yes, No, Yes, …
+$ ToothPn           &lt;fct&gt; No, No, Yes, No, No, No, No, No, Yes, No, No, Yes, N…
+$ Vision            &lt;fct&gt; No, No, No, No, No, No, No, No, No, No, No, No, No, …
+$ Vomit             &lt;fct&gt; No, No, No, No, No, No, Yes, No, No, No, Yes, Yes, N…
+$ Wheeze            &lt;fct&gt; No, No, No, Yes, No, Yes, No, No, No, No, No, Yes, N…
+$ BodyTemp          &lt;dbl&gt; 98.3, 100.4, 100.8, 98.8, 100.5, 98.4, 102.5, 98.4, …</code></pre>
+</div>
+</div>
+</section>
+<section id="model-fitting" class="level3">
+<h3 class="anchored" data-anchor-id="model-fitting">Model Fitting</h3>
+<section id="body-temperature" class="level4">
+<h4 class="anchored" data-anchor-id="body-temperature">Body Temperature</h4>
+<p>First, I want to fit a linear regression model using our first outcome of interest, body temperature, and a single predictor variable, runny nose.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>flu_lm1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(BodyTemp <span class="sc">~</span> RunnyNose, <span class="at">data =</span> flu_data)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">tidy</span>(flu_lm1)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_classic</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">font =</span> <span class="st">"Arial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class=" lightable-classic" style="font-size: Arialpx; font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> term </th>
+   <th style="text-align:right;"> estimate </th>
+   <th style="text-align:right;"> std.error </th>
+   <th style="text-align:right;"> statistic </th>
+   <th style="text-align:right;"> p.value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 99.1431280 </td>
+   <td style="text-align:right;"> 0.0819076 </td>
+   <td style="text-align:right;"> 1210.425819 </td>
+   <td style="text-align:right;"> 0.00000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RunnyNoseYes </td>
+   <td style="text-align:right;"> -0.2926463 </td>
+   <td style="text-align:right;"> 0.0971409 </td>
+   <td style="text-align:right;"> -3.012595 </td>
+   <td style="text-align:right;"> 0.00268 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(flu_lm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squ…¹ adj.r…² sigma stati…³ p.value    df logLik   AIC   BIC devia…⁴ df.re…⁵
+    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;int&gt;
+1  0.0123  0.0110  1.19    9.08 0.00268     1 -1162. 2329. 2343.   1031.     728
+# … with 1 more variable: nobs &lt;int&gt;, and abbreviated variable names
+#   ¹​r.squared, ²​adj.r.squared, ³​statistic, ⁴​deviance, ⁵​df.residual</code></pre>
+</div>
+</div>
+<p>Based on the R-squared value and the RMSE, this does not seem to be a great fit to the data. I want to throw in all of the other variables into a global model and see if this does a better job of explaining the data than the first model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>flu_lm2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(BodyTemp <span class="sc">~</span> . , <span class="at">data =</span> flu_data)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">tidy</span>(flu_lm2)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_classic</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">font =</span> <span class="st">"Arial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class=" lightable-classic" style="font-size: Arialpx; font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> term </th>
+   <th style="text-align:right;"> estimate </th>
+   <th style="text-align:right;"> std.error </th>
+   <th style="text-align:right;"> statistic </th>
+   <th style="text-align:right;"> p.value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 97.9252434 </td>
+   <td style="text-align:right;"> 0.3038043 </td>
+   <td style="text-align:right;"> 322.3300394 </td>
+   <td style="text-align:right;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SwollenLymphNodesYes </td>
+   <td style="text-align:right;"> -0.1653017 </td>
+   <td style="text-align:right;"> 0.0919592 </td>
+   <td style="text-align:right;"> -1.7975544 </td>
+   <td style="text-align:right;"> 0.0726816 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ChestCongestionYes </td>
+   <td style="text-align:right;"> 0.0873264 </td>
+   <td style="text-align:right;"> 0.0975461 </td>
+   <td style="text-align:right;"> 0.8952326 </td>
+   <td style="text-align:right;"> 0.3709727 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ChillsSweatsYes </td>
+   <td style="text-align:right;"> 0.2012657 </td>
+   <td style="text-align:right;"> 0.1273016 </td>
+   <td style="text-align:right;"> 1.5810148 </td>
+   <td style="text-align:right;"> 0.1143296 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NasalCongestionYes </td>
+   <td style="text-align:right;"> -0.2157711 </td>
+   <td style="text-align:right;"> 0.1137978 </td>
+   <td style="text-align:right;"> -1.8960920 </td>
+   <td style="text-align:right;"> 0.0583624 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughYNYes </td>
+   <td style="text-align:right;"> 0.3138934 </td>
+   <td style="text-align:right;"> 0.2407384 </td>
+   <td style="text-align:right;"> 1.3038777 </td>
+   <td style="text-align:right;"> 0.1927070 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SneezeYes </td>
+   <td style="text-align:right;"> -0.3619237 </td>
+   <td style="text-align:right;"> 0.0982987 </td>
+   <td style="text-align:right;"> -3.6818764 </td>
+   <td style="text-align:right;"> 0.0002495 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FatigueYes </td>
+   <td style="text-align:right;"> 0.2647620 </td>
+   <td style="text-align:right;"> 0.1605576 </td>
+   <td style="text-align:right;"> 1.6490163 </td>
+   <td style="text-align:right;"> 0.0995962 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SubjectiveFeverYes </td>
+   <td style="text-align:right;"> 0.4368372 </td>
+   <td style="text-align:right;"> 0.1033982 </td>
+   <td style="text-align:right;"> 4.2248066 </td>
+   <td style="text-align:right;"> 0.0000271 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> HeadacheYes </td>
+   <td style="text-align:right;"> 0.0114533 </td>
+   <td style="text-align:right;"> 0.1254052 </td>
+   <td style="text-align:right;"> 0.0913306 </td>
+   <td style="text-align:right;"> 0.9272562 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WeaknessMild </td>
+   <td style="text-align:right;"> 0.0182293 </td>
+   <td style="text-align:right;"> 0.1891690 </td>
+   <td style="text-align:right;"> 0.0963651 </td>
+   <td style="text-align:right;"> 0.9232584 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WeaknessModerate </td>
+   <td style="text-align:right;"> 0.0989441 </td>
+   <td style="text-align:right;"> 0.1978635 </td>
+   <td style="text-align:right;"> 0.5000625 </td>
+   <td style="text-align:right;"> 0.6171894 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WeaknessSevere </td>
+   <td style="text-align:right;"> 0.3734354 </td>
+   <td style="text-align:right;"> 0.2307665 </td>
+   <td style="text-align:right;"> 1.6182393 </td>
+   <td style="text-align:right;"> 0.1060648 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WeaknessYNYes </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughIntensityMild </td>
+   <td style="text-align:right;"> 0.0848811 </td>
+   <td style="text-align:right;"> 0.2798780 </td>
+   <td style="text-align:right;"> 0.3032791 </td>
+   <td style="text-align:right;"> 0.7617680 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughIntensityModerate </td>
+   <td style="text-align:right;"> -0.0613837 </td>
+   <td style="text-align:right;"> 0.3019966 </td>
+   <td style="text-align:right;"> -0.2032595 </td>
+   <td style="text-align:right;"> 0.8389917 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughIntensitySevere </td>
+   <td style="text-align:right;"> -0.0372720 </td>
+   <td style="text-align:right;"> 0.3140127 </td>
+   <td style="text-align:right;"> -0.1186957 </td>
+   <td style="text-align:right;"> 0.9055507 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughYN2Yes </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MyalgiaMild </td>
+   <td style="text-align:right;"> 0.1642421 </td>
+   <td style="text-align:right;"> 0.1604984 </td>
+   <td style="text-align:right;"> 1.0233257 </td>
+   <td style="text-align:right;"> 0.3065099 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MyalgiaModerate </td>
+   <td style="text-align:right;"> -0.0240642 </td>
+   <td style="text-align:right;"> 0.1678337 </td>
+   <td style="text-align:right;"> -0.1433810 </td>
+   <td style="text-align:right;"> 0.8860309 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MyalgiaSevere </td>
+   <td style="text-align:right;"> -0.1292631 </td>
+   <td style="text-align:right;"> 0.2078542 </td>
+   <td style="text-align:right;"> -0.6218934 </td>
+   <td style="text-align:right;"> 0.5342159 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MyalgiaYNYes </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RunnyNoseYes </td>
+   <td style="text-align:right;"> -0.0804851 </td>
+   <td style="text-align:right;"> 0.1085262 </td>
+   <td style="text-align:right;"> -0.7416190 </td>
+   <td style="text-align:right;"> 0.4585687 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> AbPainYes </td>
+   <td style="text-align:right;"> 0.0315744 </td>
+   <td style="text-align:right;"> 0.1402357 </td>
+   <td style="text-align:right;"> 0.2251524 </td>
+   <td style="text-align:right;"> 0.8219269 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ChestPainYes </td>
+   <td style="text-align:right;"> 0.1050706 </td>
+   <td style="text-align:right;"> 0.1069797 </td>
+   <td style="text-align:right;"> 0.9821547 </td>
+   <td style="text-align:right;"> 0.3263654 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> DiarrheaYes </td>
+   <td style="text-align:right;"> -0.1568064 </td>
+   <td style="text-align:right;"> 0.1295451 </td>
+   <td style="text-align:right;"> -1.2104390 </td>
+   <td style="text-align:right;"> 0.2265220 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> EyePnYes </td>
+   <td style="text-align:right;"> 0.1315436 </td>
+   <td style="text-align:right;"> 0.1297573 </td>
+   <td style="text-align:right;"> 1.0137665 </td>
+   <td style="text-align:right;"> 0.3110470 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> InsomniaYes </td>
+   <td style="text-align:right;"> -0.0068237 </td>
+   <td style="text-align:right;"> 0.0907966 </td>
+   <td style="text-align:right;"> -0.0751542 </td>
+   <td style="text-align:right;"> 0.9401137 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ItchyEyeYes </td>
+   <td style="text-align:right;"> -0.0080161 </td>
+   <td style="text-align:right;"> 0.1101909 </td>
+   <td style="text-align:right;"> -0.0727470 </td>
+   <td style="text-align:right;"> 0.9420284 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NauseaYes </td>
+   <td style="text-align:right;"> -0.0340655 </td>
+   <td style="text-align:right;"> 0.1020492 </td>
+   <td style="text-align:right;"> -0.3338147 </td>
+   <td style="text-align:right;"> 0.7386200 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> EarPnYes </td>
+   <td style="text-align:right;"> 0.0937899 </td>
+   <td style="text-align:right;"> 0.1138747 </td>
+   <td style="text-align:right;"> 0.8236242 </td>
+   <td style="text-align:right;"> 0.4104357 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> HearingYes </td>
+   <td style="text-align:right;"> 0.2322025 </td>
+   <td style="text-align:right;"> 0.2220428 </td>
+   <td style="text-align:right;"> 1.0457557 </td>
+   <td style="text-align:right;"> 0.2960374 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PharyngitisYes </td>
+   <td style="text-align:right;"> 0.3175805 </td>
+   <td style="text-align:right;"> 0.1213416 </td>
+   <td style="text-align:right;"> 2.6172439 </td>
+   <td style="text-align:right;"> 0.0090571 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BreathlessYes </td>
+   <td style="text-align:right;"> 0.0905257 </td>
+   <td style="text-align:right;"> 0.0998375 </td>
+   <td style="text-align:right;"> 0.9067309 </td>
+   <td style="text-align:right;"> 0.3648634 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ToothPnYes </td>
+   <td style="text-align:right;"> -0.0228762 </td>
+   <td style="text-align:right;"> 0.1137504 </td>
+   <td style="text-align:right;"> -0.2011084 </td>
+   <td style="text-align:right;"> 0.8406726 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> VisionYes </td>
+   <td style="text-align:right;"> -0.2746251 </td>
+   <td style="text-align:right;"> 0.2776810 </td>
+   <td style="text-align:right;"> -0.9889948 </td>
+   <td style="text-align:right;"> 0.3230099 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> VomitYes </td>
+   <td style="text-align:right;"> 0.1652722 </td>
+   <td style="text-align:right;"> 0.1514323 </td>
+   <td style="text-align:right;"> 1.0913937 </td>
+   <td style="text-align:right;"> 0.2754779 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WheezeYes </td>
+   <td style="text-align:right;"> -0.0466649 </td>
+   <td style="text-align:right;"> 0.1070356 </td>
+   <td style="text-align:right;"> -0.4359755 </td>
+   <td style="text-align:right;"> 0.6629899 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(flu_lm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squ…¹ adj.r…² sigma stati…³ p.value    df logLik   AIC   BIC devia…⁴ df.re…⁵
+    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;int&gt;
+1   0.129  0.0860  1.14    3.02 4.20e-8    34 -1116. 2304. 2469.    909.     695
+# … with 1 more variable: nobs &lt;int&gt;, and abbreviated variable names
+#   ¹​r.squared, ²​adj.r.squared, ³​statistic, ⁴​deviance, ⁵​df.residual</code></pre>
+</div>
+</div>
+<p>Let’s compare these models side-by-side.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compare_performance</span>(flu_lm1, flu_lm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Comparison of Model Performance Indices
+
+Name    | Model |  AIC (weights) | AICc (weights) |  BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma
+------------------------------------------------------------------------------------------------------
+flu_lm1 |   _lm | 2329.3 (&lt;.001) | 2329.4 (&lt;.001) | 2343.1 (&gt;.999) | 0.012 |     0.011 | 1.188 | 1.190
+flu_lm2 |   _lm | 2303.8 (&gt;.999) | 2307.7 (&gt;.999) | 2469.2 (&lt;.001) | 0.129 |     0.086 | 1.116 | 1.144</code></pre>
+</div>
+</div>
+<p>Even though it is not a great fit to the data (R-squared = 0.13), the global model is better at explaining the data than the first model based on R-sq and RMSE (as well as AIC).</p>
+</section>
+<section id="nausea" class="level4">
+<h4 class="anchored" data-anchor-id="nausea">Nausea</h4>
+<p>Now, I want to fit a logistic regression model using our second outcome of interest, nausea, with a single predictor variable, runny nose.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flu_glm1 <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(Nausea <span class="sc">~</span> RunnyNose, <span class="at">data =</span> flu_data)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">tidy</span>(flu_glm1)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_classic</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">font =</span> <span class="st">"Arial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class=" lightable-classic" style="font-size: Arialpx; font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> term </th>
+   <th style="text-align:right;"> estimate </th>
+   <th style="text-align:right;"> std.error </th>
+   <th style="text-align:right;"> statistic </th>
+   <th style="text-align:right;"> p.value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> -0.6578078 </td>
+   <td style="text-align:right;"> 0.1452003 </td>
+   <td style="text-align:right;"> -4.5303474 </td>
+   <td style="text-align:right;"> 0.0000059 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RunnyNoseYes </td>
+   <td style="text-align:right;"> 0.0501828 </td>
+   <td style="text-align:right;"> 0.1718249 </td>
+   <td style="text-align:right;"> 0.2920578 </td>
+   <td style="text-align:right;"> 0.7702424 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(flu_glm1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 8
+  null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
+          &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+1          945.     729  -472.  949.  958.     945.         728   730</code></pre>
+</div>
+</div>
+<p>Same as before, I want to fit a global model using nausea and all of the other variables in the dataset and compare it to the first model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flu_glm2 <span class="ot">&lt;-</span> <span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(Nausea <span class="sc">~</span> . , <span class="at">data =</span> flu_data)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">tidy</span>(flu_glm2)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_classic</span>(<span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="at">font =</span> <span class="st">"Arial"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<table class=" lightable-classic" style="font-size: Arialpx; font-family: &quot;Arial Narrow&quot;, &quot;Source Sans Pro&quot;, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> term </th>
+   <th style="text-align:right;"> estimate </th>
+   <th style="text-align:right;"> std.error </th>
+   <th style="text-align:right;"> statistic </th>
+   <th style="text-align:right;"> p.value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 0.2228705 </td>
+   <td style="text-align:right;"> 7.8274090 </td>
+   <td style="text-align:right;"> 0.0284731 </td>
+   <td style="text-align:right;"> 0.9772848 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SwollenLymphNodesYes </td>
+   <td style="text-align:right;"> -0.2510826 </td>
+   <td style="text-align:right;"> 0.1960289 </td>
+   <td style="text-align:right;"> -1.2808444 </td>
+   <td style="text-align:right;"> 0.2002483 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ChestCongestionYes </td>
+   <td style="text-align:right;"> 0.2755537 </td>
+   <td style="text-align:right;"> 0.2126616 </td>
+   <td style="text-align:right;"> 1.2957376 </td>
+   <td style="text-align:right;"> 0.1950659 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ChillsSweatsYes </td>
+   <td style="text-align:right;"> 0.2740967 </td>
+   <td style="text-align:right;"> 0.2878278 </td>
+   <td style="text-align:right;"> 0.9522940 </td>
+   <td style="text-align:right;"> 0.3409479 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NasalCongestionYes </td>
+   <td style="text-align:right;"> 0.4258174 </td>
+   <td style="text-align:right;"> 0.2545609 </td>
+   <td style="text-align:right;"> 1.6727521 </td>
+   <td style="text-align:right;"> 0.0943761 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughYNYes </td>
+   <td style="text-align:right;"> -0.1404234 </td>
+   <td style="text-align:right;"> 0.5187985 </td>
+   <td style="text-align:right;"> -0.2706705 </td>
+   <td style="text-align:right;"> 0.7866445 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SneezeYes </td>
+   <td style="text-align:right;"> 0.1767237 </td>
+   <td style="text-align:right;"> 0.2103493 </td>
+   <td style="text-align:right;"> 0.8401441 </td>
+   <td style="text-align:right;"> 0.4008276 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> FatigueYes </td>
+   <td style="text-align:right;"> 0.2290618 </td>
+   <td style="text-align:right;"> 0.3718816 </td>
+   <td style="text-align:right;"> 0.6159535 </td>
+   <td style="text-align:right;"> 0.5379252 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> SubjectiveFeverYes </td>
+   <td style="text-align:right;"> 0.2777411 </td>
+   <td style="text-align:right;"> 0.2253628 </td>
+   <td style="text-align:right;"> 1.2324177 </td>
+   <td style="text-align:right;"> 0.2177931 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> HeadacheYes </td>
+   <td style="text-align:right;"> 0.3312592 </td>
+   <td style="text-align:right;"> 0.2848965 </td>
+   <td style="text-align:right;"> 1.1627353 </td>
+   <td style="text-align:right;"> 0.2449369 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WeaknessMild </td>
+   <td style="text-align:right;"> -0.1216059 </td>
+   <td style="text-align:right;"> 0.4468864 </td>
+   <td style="text-align:right;"> -0.2721182 </td>
+   <td style="text-align:right;"> 0.7855312 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WeaknessModerate </td>
+   <td style="text-align:right;"> 0.3108487 </td>
+   <td style="text-align:right;"> 0.4544826 </td>
+   <td style="text-align:right;"> 0.6839618 </td>
+   <td style="text-align:right;"> 0.4939993 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WeaknessSevere </td>
+   <td style="text-align:right;"> 0.8231869 </td>
+   <td style="text-align:right;"> 0.5104242 </td>
+   <td style="text-align:right;"> 1.6127505 </td>
+   <td style="text-align:right;"> 0.1067987 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WeaknessYNYes </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughIntensityMild </td>
+   <td style="text-align:right;"> -0.2207938 </td>
+   <td style="text-align:right;"> 0.5843673 </td>
+   <td style="text-align:right;"> -0.3778339 </td>
+   <td style="text-align:right;"> 0.7055540 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughIntensityModerate </td>
+   <td style="text-align:right;"> -0.3626784 </td>
+   <td style="text-align:right;"> 0.6313701 </td>
+   <td style="text-align:right;"> -0.5744307 </td>
+   <td style="text-align:right;"> 0.5656764 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughIntensitySevere </td>
+   <td style="text-align:right;"> -0.9505442 </td>
+   <td style="text-align:right;"> 0.6581423 </td>
+   <td style="text-align:right;"> -1.4442837 </td>
+   <td style="text-align:right;"> 0.1486592 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> CoughYN2Yes </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MyalgiaMild </td>
+   <td style="text-align:right;"> -0.0041462 </td>
+   <td style="text-align:right;"> 0.3680943 </td>
+   <td style="text-align:right;"> -0.0112640 </td>
+   <td style="text-align:right;"> 0.9910128 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MyalgiaModerate </td>
+   <td style="text-align:right;"> 0.2047429 </td>
+   <td style="text-align:right;"> 0.3732305 </td>
+   <td style="text-align:right;"> 0.5485697 </td>
+   <td style="text-align:right;"> 0.5833008 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MyalgiaSevere </td>
+   <td style="text-align:right;"> 0.1207580 </td>
+   <td style="text-align:right;"> 0.4449265 </td>
+   <td style="text-align:right;"> 0.2714112 </td>
+   <td style="text-align:right;"> 0.7860748 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> MyalgiaYNYes </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RunnyNoseYes </td>
+   <td style="text-align:right;"> 0.0453236 </td>
+   <td style="text-align:right;"> 0.2326446 </td>
+   <td style="text-align:right;"> 0.1948189 </td>
+   <td style="text-align:right;"> 0.8455347 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> AbPainYes </td>
+   <td style="text-align:right;"> 0.9393036 </td>
+   <td style="text-align:right;"> 0.2814632 </td>
+   <td style="text-align:right;"> 3.3372164 </td>
+   <td style="text-align:right;"> 0.0008462 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ChestPainYes </td>
+   <td style="text-align:right;"> 0.0707772 </td>
+   <td style="text-align:right;"> 0.2278583 </td>
+   <td style="text-align:right;"> 0.3106192 </td>
+   <td style="text-align:right;"> 0.7560901 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> DiarrheaYes </td>
+   <td style="text-align:right;"> 1.0639338 </td>
+   <td style="text-align:right;"> 0.2587051 </td>
+   <td style="text-align:right;"> 4.1125354 </td>
+   <td style="text-align:right;"> 0.0000391 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> EyePnYes </td>
+   <td style="text-align:right;"> -0.3419910 </td>
+   <td style="text-align:right;"> 0.2777198 </td>
+   <td style="text-align:right;"> -1.2314249 </td>
+   <td style="text-align:right;"> 0.2181640 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> InsomniaYes </td>
+   <td style="text-align:right;"> 0.0841752 </td>
+   <td style="text-align:right;"> 0.1929851 </td>
+   <td style="text-align:right;"> 0.4361747 </td>
+   <td style="text-align:right;"> 0.6627100 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ItchyEyeYes </td>
+   <td style="text-align:right;"> -0.0633645 </td>
+   <td style="text-align:right;"> 0.2325014 </td>
+   <td style="text-align:right;"> -0.2725337 </td>
+   <td style="text-align:right;"> 0.7852117 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> EarPnYes </td>
+   <td style="text-align:right;"> -0.1817189 </td>
+   <td style="text-align:right;"> 0.2392074 </td>
+   <td style="text-align:right;"> -0.7596707 </td>
+   <td style="text-align:right;"> 0.4474514 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> HearingYes </td>
+   <td style="text-align:right;"> 0.3230517 </td>
+   <td style="text-align:right;"> 0.4524022 </td>
+   <td style="text-align:right;"> 0.7140808 </td>
+   <td style="text-align:right;"> 0.4751772 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PharyngitisYes </td>
+   <td style="text-align:right;"> 0.2753644 </td>
+   <td style="text-align:right;"> 0.2660588 </td>
+   <td style="text-align:right;"> 1.0349756 </td>
+   <td style="text-align:right;"> 0.3006803 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BreathlessYes </td>
+   <td style="text-align:right;"> 0.5268015 </td>
+   <td style="text-align:right;"> 0.2085792 </td>
+   <td style="text-align:right;"> 2.5256661 </td>
+   <td style="text-align:right;"> 0.0115479 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ToothPnYes </td>
+   <td style="text-align:right;"> 0.4806486 </td>
+   <td style="text-align:right;"> 0.2294739 </td>
+   <td style="text-align:right;"> 2.0945674 </td>
+   <td style="text-align:right;"> 0.0362095 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> VisionYes </td>
+   <td style="text-align:right;"> 0.1254977 </td>
+   <td style="text-align:right;"> 0.5411141 </td>
+   <td style="text-align:right;"> 0.2319247 </td>
+   <td style="text-align:right;"> 0.8165965 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> VomitYes </td>
+   <td style="text-align:right;"> 2.4584655 </td>
+   <td style="text-align:right;"> 0.3486077 </td>
+   <td style="text-align:right;"> 7.0522411 </td>
+   <td style="text-align:right;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> WheezeYes </td>
+   <td style="text-align:right;"> -0.3044348 </td>
+   <td style="text-align:right;"> 0.2340838 </td>
+   <td style="text-align:right;"> -1.3005376 </td>
+   <td style="text-align:right;"> 0.1934168 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> BodyTemp </td>
+   <td style="text-align:right;"> -0.0312460 </td>
+   <td style="text-align:right;"> 0.0798381 </td>
+   <td style="text-align:right;"> -0.3913668 </td>
+   <td style="text-align:right;"> 0.6955261 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(flu_glm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 8
+  null.deviance df.null logLik   AIC   BIC deviance df.residual  nobs
+          &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+1          945.     729  -376.  821.  982.     751.         695   730</code></pre>
+</div>
+</div>
+<p>Let’s see which model is a better fit.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compare_performance</span>(flu_glm1, flu_glm2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in predict.lm(object, newdata, se.fit, scale = 1, type = if (type == :
+prediction from a rank-deficient fit may be misleading
+
+Warning in predict.lm(object, newdata, se.fit, scale = 1, type = if (type == :
+prediction from a rank-deficient fit may be misleading
+
+Warning in predict.lm(object, newdata, se.fit, scale = 1, type = if (type == :
+prediction from a rank-deficient fit may be misleading
+
+Warning in predict.lm(object, newdata, se.fit, scale = 1, type = if (type == :
+prediction from a rank-deficient fit may be misleading</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Comparison of Model Performance Indices
+
+Name     | Model | AIC (weights) | AICc (weights) | BIC (weights) | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP
+----------------------------------------------------------------------------------------------------------------------------------------------
+flu_glm1 |  _glm | 948.6 (&lt;.001) |  948.6 (&lt;.001) | 957.8 (&gt;.999) | 1.169e-04 | 0.477 | 1.139 |    0.647 |  -107.871 |           0.012 | 0.545
+flu_glm2 |  _glm | 821.5 (&gt;.999) |  825.1 (&gt;.999) | 982.2 (&lt;.001) |     0.247 | 0.414 | 1.040 |    0.515 |      -Inf |           0.002 | 0.658</code></pre>
+</div>
+</div>
+<p>Once again, the global model was better at explaining the data than the univariate model.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

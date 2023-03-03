@@ -222,31 +222,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>age_gaps <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"tidytuesday_exercise"</span>, <span class="st">"data"</span>, <span class="st">"age_gaps.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 1155 Columns: 13
--- Column specification --------------------------------------------------------
+── Column specification ────────────────────────────────────────────────────────
 Delimiter: ","
 chr (8): movie_name, director, actor_1_name, actor_2_name, character_1_gende...
 dbl (5): release_year, age_difference, couple_number, actor_1_age, actor_2_age
 
-i Use `spec()` to retrieve the full column specification for this data.
-i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(age_gaps)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 1,155
 Columns: 13
-$ movie_name         &lt;chr&gt; "Harold and Maude", "Venus", "The Quiet American", ~
-$ release_year       &lt;dbl&gt; 1971, 2006, 2002, 1998, 2010, 1992, 2009, 1999, 199~
-$ director           &lt;chr&gt; "Hal Ashby", "Roger Michell", "Phillip Noyce", "Joe~
-$ age_difference     &lt;dbl&gt; 52, 50, 49, 45, 43, 42, 40, 39, 38, 38, 36, 36, 35,~
-$ couple_number      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
-$ actor_1_name       &lt;chr&gt; "Ruth Gordon", "Peter O'Toole", "Michael Caine", "D~
-$ actor_2_name       &lt;chr&gt; "Bud Cort", "Jodie Whittaker", "Do Thi Hai Yen", "T~
-$ character_1_gender &lt;chr&gt; "woman", "man", "man", "man", "man", "man", "man", ~
-$ character_2_gender &lt;chr&gt; "man", "woman", "woman", "woman", "man", "woman", "~
-$ actor_1_birthdate  &lt;chr&gt; "1896-10-30", "8/2/1932", "3/14/1933", "9/17/1930",~
-$ actor_2_birthdate  &lt;chr&gt; "3/29/1948", "6/3/1982", "10/1/1982", "11/8/1975", ~
-$ actor_1_age        &lt;dbl&gt; 75, 74, 69, 68, 81, 59, 62, 69, 57, 77, 59, 56, 65,~
-$ actor_2_age        &lt;dbl&gt; 23, 24, 20, 23, 38, 17, 22, 30, 19, 39, 23, 20, 30,~</code></pre>
+$ movie_name         &lt;chr&gt; "Harold and Maude", "Venus", "The Quiet American", …
+$ release_year       &lt;dbl&gt; 1971, 2006, 2002, 1998, 2010, 1992, 2009, 1999, 199…
+$ director           &lt;chr&gt; "Hal Ashby", "Roger Michell", "Phillip Noyce", "Joe…
+$ age_difference     &lt;dbl&gt; 52, 50, 49, 45, 43, 42, 40, 39, 38, 38, 36, 36, 35,…
+$ couple_number      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ actor_1_name       &lt;chr&gt; "Ruth Gordon", "Peter O'Toole", "Michael Caine", "D…
+$ actor_2_name       &lt;chr&gt; "Bud Cort", "Jodie Whittaker", "Do Thi Hai Yen", "T…
+$ character_1_gender &lt;chr&gt; "woman", "man", "man", "man", "man", "man", "man", …
+$ character_2_gender &lt;chr&gt; "man", "woman", "woman", "woman", "man", "woman", "…
+$ actor_1_birthdate  &lt;chr&gt; "1896-10-30", "8/2/1932", "3/14/1933", "9/17/1930",…
+$ actor_2_birthdate  &lt;chr&gt; "3/29/1948", "6/3/1982", "10/1/1982", "11/8/1975", …
+$ actor_1_age        &lt;dbl&gt; 75, 74, 69, 68, 81, 59, 62, 69, 57, 77, 59, 56, 65,…
+$ actor_2_age        &lt;dbl&gt; 23, 24, 20, 23, 38, 17, 22, 30, 19, 39, 23, 20, 30,…</code></pre>
 </div>
 </div>
 </section>
@@ -301,7 +301,7 @@ $ actor_2_age        &lt;dbl&gt; 23, 24, 20, 23, 38, 17, 22, 30, 19, 39, 23, 20,
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(character_1_gender)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>gender_c1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 x 2
+<pre><code># A tibble: 2 × 2
   character_1_gender     n
   &lt;chr&gt;              &lt;int&gt;
 1 man                  941
@@ -311,7 +311,7 @@ $ actor_2_age        &lt;dbl&gt; 23, 24, 20, 23, 38, 17, 22, 30, 19, 39, 23, 20,
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(character_2_gender)</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>gender_c2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 x 2
+<pre><code># A tibble: 2 × 2
   character_2_gender     n
   &lt;chr&gt;              &lt;int&gt;
 1 man                  215
