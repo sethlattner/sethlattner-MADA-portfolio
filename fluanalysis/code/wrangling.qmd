@@ -1,0 +1,49 @@
+---
+title: "Flu Analysis"
+subtitle: "Wrangling"
+author: "Seth Lattner"
+output:
+  html_document:
+    toc: FALSE
+---
+
+This is the first file of a three part data analysis exercise, conducted on the dataset from McKay et al 2020, found [here](https://doi.org/10.5061/dryad.51c59zw4v). This file contains data wrangling and cleaning steps in preparation for further analysis.
+
+#### Load Packages/Data
+
+```{r, warning=FALSE, message=FALSE}
+#load necessary packages
+library(tidyverse)
+library(ggplot2)
+library(here)
+```
+
+
+```{r}
+#load in data
+flu_raw <- readr::read_rds(here::here("fluanalysis", "data", "SympAct_Any_Pos.Rda"))
+
+#view data
+glimpse(flu_raw)
+summary(flu_raw)
+```
+
+#### Cleaning/Wrangling
+
+This dataset will require a small amount of cleaning - namely, I will remove some variables that will not be useful for future analysis and remove missing values.
+
+```{r}
+flu_data <- flu_raw %>%
+  select(-contains(c("Score", "Total", "DxName", "Activity", "FluA", "FluB", "Unique.Visit"))) %>%
+  drop_na()
+glimpse(flu_data)
+```
+
+#### Save Cleaned Data
+
+This completes the data cleaning that I will be doing, so I will now save the clean data as a new RDS file.
+
+```{r}
+flu_data %>%
+  saveRDS(here::here("fluanalysis", "data", "flu_data_clean.RDS"))
+```
