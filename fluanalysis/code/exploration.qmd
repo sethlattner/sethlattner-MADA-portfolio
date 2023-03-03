@@ -1,0 +1,143 @@
+---
+title: "Flu Analysis"
+subtitle: "Exploration"
+author: "Seth Lattner"
+output:
+  html_document:
+    toc: FALSE
+---
+
+This is the second file of a three part data analysis exercise, conducted on the dataset from McKay et al 2020, found [here](https://doi.org/10.5061/dryad.51c59zw4v). This file contains data exploration steps in preparation for further analysis.
+
+#### Load Data/Packages
+
+```{r, warning=FALSE, message=FALSE}
+#load necessary packages
+library(tidyverse)
+library(ggplot2)
+library(kableExtra)
+library(here)
+```
+
+```{r}
+#load and view data
+flu_data <- readRDS(here::here("fluanalysis", "data", "flu_data_clean.RDS"))
+glimpse(flu_data)
+```
+
+#### Explore Data
+
+Let's take a look at some summary stats for this dataset.
+
+```{r}
+summary(flu_data)
+```
+
+
+The two main outcomes of interest are BodyTemp and Nausea. I will plot a number of variables against these outcomes to see if any trends are immediately noticeable. 
+
+First, I want to look at histogram of body temperature to see the range and distribution.
+
+```{r}
+flu_data %>%
+  ggplot()+
+  geom_histogram(aes(BodyTemp))+
+  theme_classic()
+```
+
+This shows that a majority of patients recorded temperatures in a normal (non-fever) range. A decent proportion had temperatures between 99-100 F, with fewer being above 100 F. Temperatures up to 103.1 F were recorded.
+
+#### Body Temperature
+
+Now I will look at a number of plots comparing body temperature vs some relevant categorical predictors.
+
+Boxplot of body temperature vs reported fever symptoms.
+
+```{r}
+ggplot(flu_data, aes(BodyTemp, SubjectiveFever))+
+  geom_boxplot(fill="gray90")+
+  theme_classic()
+```
+
+It looks like in general, patients reporting fever symptoms had higher body temperatures than those that did not. The interquartile range for patients reporting fevers falls between normal temperature to low-grade fever. Several patients with body temperatures above 100 F did not report any fever symptoms.
+
+
+Boxplot of body temperature vs reported chills/sweats.
+
+```{r}
+ggplot(flu_data, aes(BodyTemp, ChillsSweats))+
+  geom_boxplot(fill="gray90")+
+  theme_classic()
+```
+
+It seems that patients with higher body temperatures experienced chills/sweats slightly more commonly than those with lower body temperatures.
+
+Boxplot of body temperature vs reported weakness. 
+
+```{r}
+ggplot(flu_data, aes(BodyTemp, Weakness))+
+  geom_boxplot(fill="gray90")+
+  theme_classic()
+```
+
+In general, higher body temperatures were recorded in patients experiencing severe weakness than those with moderate, mild, or no weakness. 
+
+Boxplot of body temperature vs cough intensity (ranked).
+
+```{r}
+ggplot(flu_data, aes(BodyTemp, CoughIntensity))+
+  geom_boxplot(fill="gray90")+
+  theme_classic()
+```
+
+In general, higher body temperatures were recorded in patients experiencing severe cough intensity than those with moderate, mild, or no coughing.
+
+Boxplot of body temperature vs myalgia. 
+
+```{r}
+ggplot(flu_data, aes(BodyTemp, Myalgia))+
+  geom_boxplot(fill="gray90")+
+  theme_classic()
+```
+
+In general, higher body temperatures were recorded in patients experiencing severe myalgia than those with moderate, mild, or no myalgia.
+
+#### Nausea
+
+Now I want to visualize nausea as predicted by a number of categorical variables.
+
+Nausea vs reported abdominal pain
+```{r}
+ggplot(flu_data, aes(Nausea))+
+  geom_histogram(aes(fill=AbPain), stat = "count")+
+  theme_classic()
+```
+
+Abdominal pain was reported more often in patients experiencing nausea.
+
+Nausea vs reported vomitting
+```{r}
+ggplot(flu_data, aes(Nausea))+
+  geom_histogram(aes(fill=Vomit), stat = "count")+
+  theme_classic()
+```
+
+Vomitting was reported more often in patients experiencing nausea.
+
+Nausea vs reported diarrhea
+```{r}
+ggplot(flu_data, aes(Nausea))+
+  geom_histogram(aes(fill=Diarrhea), stat = "count")+
+  theme_classic()
+```
+
+Diarrhea was reported more often in patients experiencing nausea.
+
+Nausea vs reported chills/sweats
+```{r}
+ggplot(flu_data, aes(Nausea))+
+  geom_histogram(aes(fill=ChillsSweats), stat = "count")+
+  theme_classic()
+```
+
+Chills/sweats were reported more often in patients experiencing nausea.
