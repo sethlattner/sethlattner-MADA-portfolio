@@ -18,6 +18,14 @@ website:
             href: ./visualization_exercise.html
           - text: "Tidy Tuesday Exercise"
             href: ./tidytuesday_exercise.html
+      - text: "Flu Analysis"
+        menu:
+          - text: "Wrangling"
+            href: ./fluanalysis/code/wrangling.html
+          - text: "Exploration"
+            href: ./fluanalysis/code/exploration.html
+          - text: "Fitting"
+            href: ./fluanalyis/code/fitting.html
     right:
       - icon: github 
         href: https://github.com/sethlattner/sethlattner-MADA-portfolio.git        
