@@ -7,7 +7,7 @@ output:
     toc: FALSE
 ---
 
-This is the final file of a three part data analysis exercise, conducted on the dataset from McKay et al 2020, found [here](https://doi.org/10.5061/dryad.51c59zw4v). This file contains data analysis and model fitting. 
+This is the third file of a four-part data analysis exercise, conducted on the dataset from McKay et al 2020, found [here](https://doi.org/10.5061/dryad.51c59zw4v). This file contains data analysis and model fitting. 
 
 #### Load Data/Packages
 

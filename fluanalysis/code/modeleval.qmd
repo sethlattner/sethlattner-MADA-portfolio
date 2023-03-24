@@ -1,0 +1,156 @@
+---
+title: "Flu Analysis"
+subtitle: "Model Evaluation"
+author: "Seth Lattner"
+output:
+  html_document:
+    toc: FALSE
+---
+
+This is the final file of a four-part data analysis exercise, conducted on the dataset from McKay et al 2020, found [here](https://doi.org/10.5061/dryad.51c59zw4v). This file contains model fitting and model performance evaluation. 
+
+#### Load Data/Packages
+
+```{r, warning=FALSE, message=FALSE}
+#load necessary packages
+library(tidyverse)
+library(tidymodels)
+library(here)
+library(performance)
+```
+
+```{r, message=FALSE}
+#load and view data
+flu_data <- readRDS(here::here("fluanalysis", "data", "flu_data_clean.RDS"))
+glimpse(flu_data)
+```
+
+#### Multivariate Model 
+
+Create training and testing datasets from the original data.
+
+```{r}
+#Fix random numbers by setting seed
+set.seed(1999)
+# Put 3/4 of the data into the training set 
+data_split <- initial_split(flu_data, prop = 3/4)
+
+# Create data frames for the two sets:
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+```
+
+Create recipe and set engine
+
+```{r}
+#create recipe
+flu_rec <- recipe(Nausea ~ ., data = train_data)
+
+#set engine
+log_reg <- 
+  logistic_reg() %>%
+  set_engine("glm")
+```
+
+Create workflow and fit the training data
+
+```{r}
+#create workflow
+flu_flow <- 
+  workflow() %>%
+  add_model(log_reg) %>%
+  add_recipe(flu_rec)
+
+#fit to training data
+flu_fit <-
+  flu_flow %>%
+  fit(data = train_data)
+```
+
+Extract model fit
+
+```{r}
+flu_fit %>%
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+Fit testing data using model created from training data
+
+```{r}
+predict(flu_fit, test_data)
+```
+```{r}
+flu_aug <- 
+  augment(flu_fit, test_data)
+
+flu_aug %>%
+  select(Nausea, .pred_No, .pred_Yes)
+```
+
+```{r}
+flu_aug %>%
+  roc_curve(truth = Nausea, .pred_No) %>%
+  autoplot()
+```
+
+```{r}
+flu_aug %>%
+  roc_auc(truth = Nausea, .pred_No)
+```
+
+#### Univariate Model
+
+Create recipe and set engine
+
+```{r}
+#create recipe
+flu_rec2 <- recipe(Nausea ~ RunnyNose, data = train_data)
+```
+
+Create workflow and fit the training data
+
+```{r}
+#create workflow
+flu_flow2 <- 
+  workflow() %>%
+  add_model(log_reg) %>%
+  add_recipe(flu_rec2)
+
+#fit to training data
+flu_fit2 <-
+  flu_flow2 %>%
+  fit(data = train_data)
+```
+
+Extract model fit
+
+```{r}
+flu_fit2 %>%
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+Fit testing data using model created from training data
+
+```{r}
+predict(flu_fit2, test_data)
+```
+```{r}
+flu_aug2 <- 
+  augment(flu_fit2, test_data)
+
+flu_aug2 %>%
+  select(Nausea, .pred_No, .pred_Yes)
+```
+
+```{r}
+flu_aug2 %>%
+  roc_curve(truth = Nausea, .pred_No) %>%
+  autoplot()
+```
+
+```{r}
+flu_aug2 %>%
+  roc_auc(truth = Nausea, .pred_No)
+```
