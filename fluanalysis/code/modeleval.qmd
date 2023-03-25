@@ -17,6 +17,8 @@ library(tidyverse)
 library(tidymodels)
 library(here)
 library(performance)
+library(dplyr)
+library(yardstick)
 ```
 
 ```{r, message=FALSE}
@@ -154,3 +156,108 @@ flu_aug2 %>%
 flu_aug2 %>%
   roc_auc(truth = Nausea, .pred_No)
 ```
+
+# This section added by Raquel Francisco
+### Working with continous variable (BodyTemp)
+```{r}
+##Will use as much as premade data/code as possible
+
+#create recipe
+flu_rec3 <- recipe(BodyTemp ~ ., data = train_data)
+
+#reset engine
+lm_reg <- 
+  linear_reg() %>%
+  set_engine("lm")
+
+#create workflow
+flu_flow3 <- 
+  workflow() %>%
+  add_model(lm_reg) %>%
+  add_recipe(flu_rec3)
+
+#fit to training data
+flu_fit3 <-
+  flu_flow3 %>%
+  fit(data = train_data)
+
+flu_fit3 %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+
+```{r}
+#Use a trained workflow to predict
+predict(flu_fit3, train_data)
+
+#On trained data
+flu_aug3train <- 
+  augment(flu_fit3, train_data)
+
+flu_aug3train %>%
+  select(BodyTemp, .pred)
+
+#flu_aug3train %>%
+#  rmse(BodyTemp , .pred)#Unable to get this to run!)
+
+#On test data
+flu_aug3test <- 
+  augment(flu_fit3, test_data)
+
+flu_aug3test %>%
+  select(BodyTemp, .pred)
+
+#flu_aug3test %>%
+#  rmse(BodyTemp , .pred) #Unable to get this to run!
+
+```
+
+## Univariate Model
+
+```{r}
+#create recipe
+flu_rec4 <- recipe(BodyTemp ~ Myalgia, data = train_data)
+
+#create workflow
+flu_flow4 <- 
+  workflow() %>%
+  add_model(lm_reg) %>%
+  add_recipe(flu_rec4)
+
+#fit to training data
+flu_fit4 <-
+  flu_flow4 %>%
+  fit(data = train_data)
+
+flu_fit4 %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+```{r}
+#Use a trained workflow to predict
+predict(flu_fit4, train_data)
+
+#On trained data
+flu_aug4train <- 
+  augment(flu_fit4, train_data)
+
+flu_aug4train %>%
+  select(BodyTemp, .pred)
+
+#flu_aug4train %>%
+#  rmse(BodyTemp , .pred)#Unable to get this to run!
+
+#On test data
+flu_aug4test <- 
+  augment(flu_fit4, test_data)
+
+flu_aug4test %>%
+  select(BodyTemp, .pred)
+
+#flu_aug4test %>%
+#  rmse(BodyTemp , .pred) #Unable to get this to run!
+
+```
+Unable to get RMSE to work after troubleshooting via several help pages.
