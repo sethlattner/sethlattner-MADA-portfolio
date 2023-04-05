@@ -1,0 +1,68 @@
+---
+title: "Flu Analysis"
+subtitle: "Machine Learning"
+author: "Seth Lattner"
+output:
+  html_document:
+    toc: FALSE
+---
+
+This file contains data processing and analysis, including some implementation of machine learning. It is conducted on the dataset from McKay et al 2020, found [here](https://doi.org/10.5061/dryad.51c59zw4v).
+
+#### Load and Process Data
+
+```{r, message=FALSE, warning=FALSE}
+#load required packages
+library(tidyverse)
+library(tidymodels)
+library(here)
+```
+
+```{r}
+#load data
+flu_data <- readr::read_rds(here("fluanalysis", "data", "flu_data_clean.RDS"))
+glimpse(flu_data)
+```
+
+I now want to remove a few correlated variables.
+
+```{r}
+#remove yes/no variables
+flu_data <- flu_data %>%
+  select(-ends_with("YN"))
+
+#remove near-zero variance predictors (hearing and vision)
+flu_data <- flu_data %>%
+  select(-c(Hearing, Vision))
+
+#view new data
+glimpse(flu_data)
+```
+
+#### Data preparation
+
+```{r}
+# set seed for reproducible analysis
+set.seed(123) 
+
+#split data into 70% training, 30% testing groups
+flu_split <-initial_split(flu_data, prop = 7/10, strata = BodyTemp) 
+
+#New split dataframes 
+flu_train <- training(flu_split)
+flu_test <- testing(flu_split)
+```
+
+Cross validation
+
+```{r}
+#5-fold cross-validation, 5 times repeated, stratified by BodyTemp
+cv5 <- vfold_cv(flu_train, v = 5, repeats = 5, strata = BodyTemp)
+```
+
+Recipe
+
+```{r}
+
+```
+
