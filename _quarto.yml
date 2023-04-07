@@ -30,6 +30,10 @@ website:
             href: ./fluanalysis/code/fitting.html
           - text: "Fitting"
             href: ./fluanalysis/code/modeleval.html
+      - text: "Project"
+        menu:
+          - text: "Project"
+            href: ./Project/project.html
     right:
       - icon: github 
         href: https://github.com/sethlattner/sethlattner-MADA-portfolio.git        
