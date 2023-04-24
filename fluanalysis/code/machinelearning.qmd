@@ -16,6 +16,11 @@ This file contains data processing and analysis, including some implementation o
 library(tidyverse)
 library(tidymodels)
 library(here)
+library(rpart)
+library(glmnet)
+library(ranger)
+library(rpart.plot)
+library(parallel)
 ```
 
 ```{r}
@@ -57,12 +62,175 @@ Cross validation
 
 ```{r}
 #5-fold cross-validation, 5 times repeated, stratified by BodyTemp
-cv5 <- vfold_cv(flu_train, v = 5, repeats = 5, strata = BodyTemp)
+folds <- vfold_cv(flu_train, v = 5, repeats = 5, strata = BodyTemp)
 ```
 
 Recipe
 
-```{r}
+```{r, warning=FALSE}
+#recipe for all predictors
+global_recipe <- 
+  recipe(BodyTemp ~ ., data = flu_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
 
+#null recipe
+null_recipe <- 
+  recipe(BodyTemp ~ 1, data = flu_train)
+
+#set model engine
+linear_reg <- linear_reg() %>% 
+  set_engine("lm") %>% 
+  set_mode("regression")
+
+#create workflow
+null_workflow <- workflow() %>%
+  add_model(linear_reg) %>%
+  add_recipe(null_recipe)
+
+#fit folds data
+null_model <- fit_resamples(null_workflow, resamples = folds)
+
+#null model performance
+null_performance <- collect_metrics(null_model)
+tibble(null_performance)
+```
+Tree Model
+
+```{r, warning=FALSE}
+#create recipe for tree model
+tree_model <- decision_tree( 
+  cost_complexity = tune(),
+  tree_depth = tune()
+  ) %>%
+  set_engine("rpart") %>%
+  set_mode("regression")
+
+#tree workflow
+tree_workflow <- workflow() %>%
+  add_model(tree_model) %>%
+  add_recipe(global_recipe)
+
+#setup tree tuning grid
+tree_grid <- grid_regular(cost_complexity(),
+                          tree_depth(),
+                          levels = 5)
+
+#fit to folds data
+tree_fit <- tune_grid(tree_workflow, resamples = folds, grid = tree_grid)
+
+#null model performance
+tree_performance <- collect_metrics(tree_fit)
+tibble(tree_performance)
+autoplot(tree_fit)
+```
+
+```{r}
+#select best tree model
+best_tree <- tree_fit %>%
+  select_best(metric = 'rmse')
+
+#final model
+final_tree <- tree_workflow %>%
+  finalize_workflow(best_tree)
+
+#fit final model to data
+tree_fit_final <- final_tree %>%
+  fit(flu_train)
+
+#plot final fit
+rpart.plot::rpart.plot(extract_fit_parsnip(tree_fit_final)$fit)
+```
+LASSO
+
+```{r}
+#LASSO model
+lasso_model <- linear_reg(
+  penalty=tune(),mixture=1) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+
+#LASSO workflow
+lasso_workflow <- workflow() %>%
+  add_model(lasso_model) %>%
+  add_recipe(global_recipe)
+
+#LASSO grid
+lasso_grid <- tibble(penalty = 10^seq(-4, -1, length.out = 30))
+
+#highest and lowest penalty values
+lasso_grid %>%
+  top_n(5)
+lasso_grid %>%
+  top_n(-5)
+
+#model tuning and training
+lasso_train <- lasso_workflow %>%
+  tune_grid(
+    resamples=folds,
+    grid=lasso_grid,
+    control=control_grid(save_pred = TRUE),
+    metrics=metric_set(rmse))
+
+lasso_train %>%
+  collect_metrics()
+
+autoplot(lasso_train)
+
+#select best model
+lasso_best <- lasso_train %>%
+  select_best(metric = 'rmse')
+
+#finalized lasso 
+lasso_final <- lasso_workflow %>%
+  finalize_workflow(lasso_best)
+
+lasso_fit <- lasso_final %>% 
+  fit(flu_train)
+
+plot_fit <- extract_fit_engine(lasso_fit)
+plot(plot_fit, "lambda")
+
+```
+
+Random Forest
+
+```{r}
+#create cores object
+cores <- parallel::detectCores()
+
+#rf model
+rf_model <- rand_forest(mtry=tune(),min_n=tune(),trees=1000) %>%
+  set_engine("ranger", num.threads = cores)%>%
+  set_mode("regression")
+
+#rf workflow
+rf_workflow <- workflow() %>%
+  add_model(rf_model) %>%
+  add_recipe(global_recipe)
+
+rf_train <- rf_workflow %>%
+  tune_grid(
+    resamples=folds,
+    grid=25,
+    control=control_grid(save_pred=TRUE),
+    metrics = metric_set(rmse))
+
+autoplot(rf_train)
+
+rf_train %>% collect_metrics()
+
+#select best rf model
+rf_best <- rf_train %>%
+  select_best(metric = 'rmse')
+
+#final rf model
+rf_final <- rf_workflow %>% 
+  finalize_workflow(rf_best)
+
+rf_fit <- rf_final %>% 
+  fit(flu_train)
+
+rf_pred <- rf_final %>%
+  fit(flu_train)
 ```
 
