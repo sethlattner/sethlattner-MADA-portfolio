@@ -28,7 +28,7 @@ website:
             href: ./fluanalysis/code/exploration.html
           - text: "Fitting"
             href: ./fluanalysis/code/fitting.html
-          - text: "Fitting"
+          - text: "Model Evaluation"
             href: ./fluanalysis/code/modeleval.html
           - text: "Machine Learning"
             href: ./fluanalysis/code/machinelearning.html
