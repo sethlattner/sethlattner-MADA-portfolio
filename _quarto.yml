@@ -30,6 +30,8 @@ website:
             href: ./fluanalysis/code/fitting.html
           - text: "Fitting"
             href: ./fluanalysis/code/modeleval.html
+          - text: "Machine Learning"
+            href: ./fluanalysis/code/machinelearning.html
       - text: "Project"
         menu:
           - text: "Project"
