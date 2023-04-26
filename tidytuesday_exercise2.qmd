@@ -13,7 +13,19 @@ library(tidytuesdayR)
 
 
 ```{r}
-raw_data <- tidytuesdayR::tt_load('2023-04-11')
+tidytuesdayR::tt_load('2023-04-11')
 glimpse(raw_data)
+```
+```{r}
+eggproduction <- raw_data$`egg-production`
+glimpse(eggproduction)
+unique(eggproduction$prod_type)
+unique(eggproduction$prod_process)
+summary(eggproduction)
+
+
+cagefree <- raw_data$`cage-free-percentages`
+glimpse(cagefree)
+summary(cagefree)
 ```
 
