@@ -193,7 +193,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>  
         <li>
     <a class="dropdown-item" href="../.././fluanalysis/code/modeleval.html">
- <span class="dropdown-text">Fitting</span></a>
+ <span class="dropdown-text">Model Evaluation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././fluanalysis/code/machinelearning.html">
+ <span class="dropdown-text">Machine Learning</span></a>
   </li>  
     </ul>
   </li>
@@ -270,28 +274,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>BEAM_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"dataanalysis_exercise"</span>, <span class="st">"data"</span>, <span class="st">"BEAM_Dashboard_-_Report_Data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 128342 Columns: 10
-── Column specification ────────────────────────────────────────────────────────
+-- Column specification --------------------------------------------------------
 Delimiter: ","
 chr (4): State, Source, Pathogen, Serotype/Species
 dbl (6): Year, Month, Number_of_isolates, Outbreak_associated_isolates, New_...
 
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(BEAM_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 128,342
 Columns: 10
-$ Year                            &lt;dbl&gt; 2017, 2017, 2017, 2017, 2017, 2017, 20…
-$ Month                           &lt;dbl&gt; 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,…
-$ State                           &lt;chr&gt; "TX", "TX", "TX", "TX", "TX", "TX", "T…
-$ Source                          &lt;chr&gt; "Stool", "Stool", "Stool", "Stool", "S…
-$ Pathogen                        &lt;chr&gt; "Escherichia", "Escherichia", "Salmone…
-$ `Serotype/Species`              &lt;chr&gt; "Shigella Flexneri Serotype Undetermin…
-$ Number_of_isolates              &lt;dbl&gt; 1, 14, 1, 5, 1, 2, 2, 1, 2, 2, 1, 16, …
-$ Outbreak_associated_isolates    &lt;dbl&gt; NA, NA, NA, NA, NA, 2, NA, NA, NA, NA,…
-$ New_multistate_outbreaks        &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
-$ New_multistate_outbreaks_unique &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</code></pre>
+$ Year                            &lt;dbl&gt; 2017, 2017, 2017, 2017, 2017, 2017, 20~
+$ Month                           &lt;dbl&gt; 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,~
+$ State                           &lt;chr&gt; "TX", "TX", "TX", "TX", "TX", "TX", "T~
+$ Source                          &lt;chr&gt; "Stool", "Stool", "Stool", "Stool", "S~
+$ Pathogen                        &lt;chr&gt; "Escherichia", "Escherichia", "Salmone~
+$ `Serotype/Species`              &lt;chr&gt; "Shigella Flexneri Serotype Undetermin~
+$ Number_of_isolates              &lt;dbl&gt; 1, 14, 1, 5, 1, 2, 2, 1, 2, 2, 1, 16, ~
+$ Outbreak_associated_isolates    &lt;dbl&gt; NA, NA, NA, NA, NA, 2, NA, NA, NA, NA,~
+$ New_multistate_outbreaks        &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ New_multistate_outbreaks_unique &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~</code></pre>
 </div>
 </div>
 </section>
@@ -310,16 +314,16 @@ $ New_multistate_outbreaks_unique &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 128,342
 Columns: 10
-$ Year                            &lt;dbl&gt; 2017, 2017, 2017, 2017, 2017, 2017, 20…
-$ Month                           &lt;dbl&gt; 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,…
-$ State                           &lt;fct&gt; TX, TX, TX, TX, TX, TX, TX, TX, TX, TX…
-$ Source                          &lt;fct&gt; Stool, Stool, Stool, Stool, Stool, Sto…
-$ Pathogen                        &lt;fct&gt; Escherichia, Escherichia, Salmonella, …
-$ `Serotype/Species`              &lt;fct&gt; "Shigella Flexneri Serotype Undetermin…
-$ Number_of_isolates              &lt;dbl&gt; 1, 14, 1, 5, 1, 2, 2, 1, 2, 2, 1, 16, …
-$ Outbreak_associated_isolates    &lt;dbl&gt; NA, NA, NA, NA, NA, 2, NA, NA, NA, NA,…
-$ New_multistate_outbreaks        &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
-$ New_multistate_outbreaks_unique &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</code></pre>
+$ Year                            &lt;dbl&gt; 2017, 2017, 2017, 2017, 2017, 2017, 20~
+$ Month                           &lt;dbl&gt; 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,~
+$ State                           &lt;fct&gt; TX, TX, TX, TX, TX, TX, TX, TX, TX, TX~
+$ Source                          &lt;fct&gt; Stool, Stool, Stool, Stool, Stool, Sto~
+$ Pathogen                        &lt;fct&gt; Escherichia, Escherichia, Salmonella, ~
+$ `Serotype/Species`              &lt;fct&gt; "Shigella Flexneri Serotype Undetermin~
+$ Number_of_isolates              &lt;dbl&gt; 1, 14, 1, 5, 1, 2, 2, 1, 2, 2, 1, 16, ~
+$ Outbreak_associated_isolates    &lt;dbl&gt; NA, NA, NA, NA, NA, 2, NA, NA, NA, NA,~
+$ New_multistate_outbreaks        &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ New_multistate_outbreaks_unique &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~</code></pre>
 </div>
 </div>
 <p>I also want to group the total number of isolates of each pathogen for each year. This will help simplify the results and can be used for further analysis.</p>
@@ -331,9 +335,9 @@ $ New_multistate_outbreaks_unique &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 18
 Columns: 3
-$ Year         &lt;dbl&gt; 2017, 2017, 2017, 2018, 2018, 2018, 2019, 2019, 2019, 202…
-$ Pathogen     &lt;fct&gt; Campylobacter, Escherichia, Salmonella, Campylobacter, Es…
-$ sum_isolates &lt;dbl&gt; 2756, 10017, 47477, 4813, 11108, 51385, 4414, 10943, 4695…</code></pre>
+$ Year         &lt;dbl&gt; 2017, 2017, 2017, 2018, 2018, 2018, 2019, 2019, 2019, 202~
+$ Pathogen     &lt;fct&gt; Campylobacter, Escherichia, Salmonella, Campylobacter, Es~
+$ sum_isolates &lt;dbl&gt; 2756, 10017, 47477, 4813, 11108, 51385, 4414, 10943, 4695~</code></pre>
 </div>
 </div>
 <p>Now that these variables are reclassified, I want to change the NA’s in a few columns to 0’s, which is more indicative of their actual value.</p>
@@ -345,16 +349,16 @@ $ sum_isolates &lt;dbl&gt; 2756, 10017, 47477, 4813, 11108, 51385, 4414, 10943, 
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 128,342
 Columns: 10
-$ Year                            &lt;dbl&gt; 2017, 2017, 2017, 2017, 2017, 2017, 20…
-$ Month                           &lt;dbl&gt; 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,…
-$ State                           &lt;fct&gt; TX, TX, TX, TX, TX, TX, TX, TX, TX, TX…
-$ Source                          &lt;fct&gt; Stool, Stool, Stool, Stool, Stool, Sto…
-$ Pathogen                        &lt;fct&gt; Escherichia, Escherichia, Salmonella, …
-$ `Serotype/Species`              &lt;fct&gt; "Shigella Flexneri Serotype Undetermin…
-$ Number_of_isolates              &lt;dbl&gt; 1, 14, 1, 5, 1, 2, 2, 1, 2, 2, 1, 16, …
-$ Outbreak_associated_isolates    &lt;dbl&gt; 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0,…
-$ New_multistate_outbreaks        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-$ New_multistate_outbreaks_unique &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</code></pre>
+$ Year                            &lt;dbl&gt; 2017, 2017, 2017, 2017, 2017, 2017, 20~
+$ Month                           &lt;dbl&gt; 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,~
+$ State                           &lt;fct&gt; TX, TX, TX, TX, TX, TX, TX, TX, TX, TX~
+$ Source                          &lt;fct&gt; Stool, Stool, Stool, Stool, Stool, Sto~
+$ Pathogen                        &lt;fct&gt; Escherichia, Escherichia, Salmonella, ~
+$ `Serotype/Species`              &lt;fct&gt; "Shigella Flexneri Serotype Undetermin~
+$ Number_of_isolates              &lt;dbl&gt; 1, 14, 1, 5, 1, 2, 2, 1, 2, 2, 1, 16, ~
+$ Outbreak_associated_isolates    &lt;dbl&gt; 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0,~
+$ New_multistate_outbreaks        &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~
+$ New_multistate_outbreaks_unique &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~</code></pre>
 </div>
 </div>
 <p>That will conclude the data cleaning I will be conducting. Perhaps more wrangling could have been done, but I think this is a good start and sets up some the next contributor fairly well.</p>

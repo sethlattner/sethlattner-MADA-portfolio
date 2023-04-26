@@ -192,7 +192,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </li>  
         <li>
     <a class="dropdown-item" href="././fluanalysis/code/modeleval.html">
- <span class="dropdown-text">Fitting</span></a>
+ <span class="dropdown-text">Model Evaluation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="././fluanalysis/code/machinelearning.html">
+ <span class="dropdown-text">Machine Learning</span></a>
   </li>  
     </ul>
   </li>
@@ -272,7 +276,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(raw_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>List of 2
- $ egg-production       : spc_tbl_ [220 × 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ egg-production       : spc_tbl_ [220 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
   ..$ observed_month: Date[1:220], format: "2016-07-31" "2016-08-31" ...
   ..$ prod_type     : chr [1:220] "hatching eggs" "hatching eggs" "hatching eggs" "hatching eggs" ...
   ..$ prod_process  : chr [1:220] "all" "all" "all" "all" ...
@@ -289,7 +293,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   .. ..   source = col_character()
   .. .. )
   ..- attr(*, "problems")=&lt;externalptr&gt; 
- $ cage-free-percentages: spc_tbl_ [96 × 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ cage-free-percentages: spc_tbl_ [96 x 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
   ..$ observed_month: Date[1:96], format: "2007-12-31" "2008-12-31" ...
   ..$ percent_hens  : num [1:96] 3.2 3.5 3.6 4.4 5.4 6 5.9 5.7 8.6 9.9 ...
   ..$ percent_eggs  : num [1:96] NA NA NA NA NA NA NA NA NA NA ...
