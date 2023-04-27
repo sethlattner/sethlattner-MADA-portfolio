@@ -9,14 +9,22 @@ output:
 library(tidyverse)
 library(here)
 library(tidytuesdayR)
+library(tidymodels)
+library(rpart)
+library(rpart.plot)
+library(glmnet)
+library(ranger)
 ```
 
+### Load in Data
 
-```{r}
-tidytuesdayR::tt_load('2023-04-11')
+```{r, warning=FALSE, message=FALSE}
+#load in data
+raw_data <- tidytuesdayR::tt_load('2023-04-11')
 glimpse(raw_data)
 ```
 ```{r}
+#closer look at variables
 eggproduction <- raw_data$`egg-production`
 glimpse(eggproduction)
 unique(eggproduction$prod_type)
@@ -27,5 +35,133 @@ summary(eggproduction)
 cagefree <- raw_data$`cage-free-percentages`
 glimpse(cagefree)
 summary(cagefree)
+```
+All dates seem to be in the same format, so no need to mutate anything there. The 'all' category in the production process variable seems to confuse the data, so I will remove those observations. There are 42 missing values of 'percent_eggs' in the cagefree dataset. Again, not sure how to best address this yet, so I will leave it for now and do a bit of exploring. The 'source' variable can be removed, as it is not helpful for analysis.
+
+### Data Cleaning
+
+```{r}
+#remove unneeded variables
+eggproduction <- eggproduction %>%
+  select(!source) %>%
+  filter(!prod_process == "all")
+
+cagefree <- cagefree %>%
+  select(!source)
+```
+
+### Exploratory analysis
+
+```{r}
+eggproduction %>%
+ggplot(aes(observed_month, n_eggs, color = prod_process))+
+  geom_point(cex=2, alpha=0.5)+
+  theme_bw()
+```
+
+```{r}
+cagefree %>%
+  ggplot(aes(observed_month, percent_hens))+
+  geom_point(color = "gray40", cex = 3, alpha = 0.5)+
+  theme_bw()
+```
+
+### Data Analysis
+
+#### Question:
+
+Cage free (non-organic) egg production is increasing dramatically over time, whereas cage free (organic) egg production is remaining stable. I will choose number of eggs as the response variable and look at production process, observed month, number of hens, and production type as predictors.
+
+#### Hypothesis
+
+```{r, warning=FALSE, message=FALSE}
+#set seed for reproducibility
+set.seed(2023)
+splitdata <- initial_split(eggproduction, strata=prod_process)
+train <- training(splitdata)
+test  <- testing(splitdata)
+
+
+#null model
+null_model <- null_model() %>%
+  set_engine("parsnip") %>%
+  set_mode("regression")
+
+
+null_recipe <- 
+  recipe(n_eggs ~ 1, data = train) %>%
+  step_dummy(all_nominal(), -all_outcomes()) %>% 
+  step_ordinalscore()
+
+
+null_workflow <- workflow() %>%
+  add_model(null_model) %>%
+  add_recipe(null_recipe)
+
+cv_folds <- vfold_cv(train, v = 5, repeats = 5, strata = n_eggs) 
+
+null_fit <- fit_resamples(null_workflow, resamples = cv_folds)
+null_fit %>%  collect_metrics()
+```
+
+RMSE over 3 billion for the null model...intesting...
+
+Let's try some different approaches.
+
+#### Tree Model
+
+```{r}
+#create tree model
+tree_model <- 
+  decision_tree(
+    cost_complexity = tune(),
+    tree_depth = tune()) %>% 
+  set_engine("rpart") %>% 
+  set_mode("regression")
+
+# create tree model workflow
+tree_workflow <- workflow() %>%
+  add_model(tree_model) %>%
+  add_formula(n_eggs ~ prod_process)
+
+# create grid for tree model
+grid1 <- grid_regular(cost_complexity(),
+                          tree_depth(),
+                          levels = 5)
+
+# fit using grid
+tree_fit <- 
+  tree_workflow %>% 
+  tune_grid(resamples = cv_folds,
+    grid = grid1,
+    control = control_resamples(save_pred = TRUE))
+
+tree_fit %>% 
+  collect_metrics()
+
+tree_fit %>%
+  autoplot()
+
+best <- tree_fit %>%
+  select_best(metric = "rmse")
+best
+```
+```{r}
+final_tree <- tree_workflow %>%
+  finalize_workflow(best)
+
+final_tree_fit <- final_tree %>%
+  fit(train)
+
+tree_pred <- final_tree %>%
+  fit(train) %>%
+  predict(train)
+
+resids <- train$n_eggs - tree_pred
+resid_plot <- tibble(resids, tree_pred)
+
+resid_plot %>%
+ggplot(aes(tree_pred, resids))+
+  geom_point()
 ```
 

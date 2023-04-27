@@ -254,29 +254,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytuesdayR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="load-in-data" class="level3">
+<h3 class="anchored" data-anchor-id="load-in-data">Load in Data</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2023-04-11'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>--- Compiling #TidyTuesday Information for 2023-04-11 ----</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>--- There are 2 files available ---</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>--- Starting Download ---</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load in data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2023-04-11'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Downloading file 1 of 2: `egg-production.csv`
     Downloading file 2 of 2: `cage-free-percentages.csv`</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>--- Download complete ---</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(raw_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(raw_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>List of 2
- $ egg-production       : spc_tbl_ [220 x 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ egg-production       : spc_tbl_ [220 × 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
   ..$ observed_month: Date[1:220], format: "2016-07-31" "2016-08-31" ...
   ..$ prod_type     : chr [1:220] "hatching eggs" "hatching eggs" "hatching eggs" "hatching eggs" ...
   ..$ prod_process  : chr [1:220] "all" "all" "all" "all" ...
@@ -293,7 +284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   .. ..   source = col_character()
   .. .. )
   ..- attr(*, "problems")=&lt;externalptr&gt; 
- $ cage-free-percentages: spc_tbl_ [96 x 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ cage-free-percentages: spc_tbl_ [96 × 4] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
   ..$ observed_month: Date[1:96], format: "2007-12-31" "2008-12-31" ...
   ..$ percent_hens  : num [1:96] 3.2 3.5 3.6 4.4 5.4 6 5.9 5.7 8.6 9.9 ...
   ..$ percent_eggs  : num [1:96] NA NA NA NA NA NA NA NA NA NA ...
@@ -319,8 +310,103 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  - attr(*, "class")= chr "tt_data"</code></pre>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#closer look at variables</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>eggproduction <span class="ot">&lt;-</span> raw_data<span class="sc">$</span><span class="st">`</span><span class="at">egg-production</span><span class="st">`</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(eggproduction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 220
+Columns: 6
+$ observed_month &lt;date&gt; 2016-07-31, 2016-08-31, 2016-09-30, 2016-10-31, 2016-1…
+$ prod_type      &lt;chr&gt; "hatching eggs", "hatching eggs", "hatching eggs", "hat…
+$ prod_process   &lt;chr&gt; "all", "all", "all", "all", "all", "all", "all", "all",…
+$ n_hens         &lt;dbl&gt; 57975000, 57595000, 57161000, 56857000, 57116000, 57750…
+$ n_eggs         &lt;dbl&gt; 1147000000, 1142700000, 1093300000, 1126700000, 1096600…
+$ source         &lt;chr&gt; "ChicEggs-09-23-2016.pdf", "ChicEggs-10-21-2016.pdf", "…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(eggproduction<span class="sc">$</span>prod_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "hatching eggs" "table eggs"   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(eggproduction<span class="sc">$</span>prod_process)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "all"                     "cage-free (non-organic)"
+[3] "cage-free (organic)"    </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(eggproduction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> observed_month        prod_type         prod_process           n_hens         
+ Min.   :2016-07-31   Length:220         Length:220         Min.   : 13500000  
+ 1st Qu.:2017-09-30   Class :character   Class :character   1st Qu.: 17284500  
+ Median :2018-11-15   Mode  :character   Mode  :character   Median : 59939500  
+ Mean   :2018-11-14                                         Mean   :110839873  
+ 3rd Qu.:2019-12-31                                         3rd Qu.:125539250  
+ Max.   :2021-02-28                                         Max.   :341166000  
+     n_eggs             source         
+ Min.   :2.981e+08   Length:220        
+ 1st Qu.:4.240e+08   Class :character  
+ Median :1.155e+09   Mode  :character  
+ Mean   :2.607e+09                     
+ 3rd Qu.:2.963e+09                     
+ Max.   :8.601e+09                     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cagefree <span class="ot">&lt;-</span> raw_data<span class="sc">$</span><span class="st">`</span><span class="at">cage-free-percentages</span><span class="st">`</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(cagefree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 96
+Columns: 4
+$ observed_month &lt;date&gt; 2007-12-31, 2008-12-31, 2009-12-31, 2010-12-31, 2011-1…
+$ percent_hens   &lt;dbl&gt; 3.20000, 3.50000, 3.60000, 4.40000, 5.40000, 6.00000, 5…
+$ percent_eggs   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 9.634938, NA, 9…
+$ source         &lt;chr&gt; "Egg-Markets-Overview-2019-10-19.pdf", "Egg-Markets-Ove…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cagefree)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> observed_month        percent_hens    percent_eggs       source         
+ Min.   :2007-12-31   Min.   : 3.20   Min.   : 9.557   Length:96         
+ 1st Qu.:2017-05-23   1st Qu.:13.46   1st Qu.:14.521   Class :character  
+ Median :2018-11-15   Median :17.30   Median :16.235   Mode  :character  
+ Mean   :2018-05-12   Mean   :17.95   Mean   :17.095                     
+ 3rd Qu.:2020-02-28   3rd Qu.:23.46   3rd Qu.:19.460                     
+ Max.   :2021-02-28   Max.   :29.20   Max.   :24.546                     
+                                      NA's   :42                         </code></pre>
+</div>
+</div>
+</section>
+<section id="data-cleaning" class="level3">
+<h3 class="anchored" data-anchor-id="data-cleaning">Data Cleaning</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#remove unneeded variables</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>eggproduction <span class="ot">&lt;-</span> eggproduction <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>source)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>cagefree <span class="ot">&lt;-</span> cagefree <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>source)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exploratory-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="exploratory-analysis">Exploratory analysis</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>eggproduction <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(observed_month, n_eggs, <span class="at">color =</span> prod_process))<span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">cex=</span><span class="dv">2</span>, <span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="tidytuesday_exercise2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cagefree <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(observed_month, percent_hens))<span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"gray40"</span>, <span class="at">cex =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="tidytuesday_exercise2_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
