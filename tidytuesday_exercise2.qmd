@@ -110,7 +110,7 @@ Let's try some different approaches.
 
 #### Tree Model
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 #create tree model
 tree_model <- 
   decision_tree(
@@ -146,7 +146,7 @@ best <- tree_fit %>%
   select_best(metric = "rmse")
 best
 ```
-```{r}
+```{r, warning=FALSE, message=FALSE}
 final_tree <- tree_workflow %>%
   finalize_workflow(best)
 
@@ -158,10 +158,43 @@ tree_pred <- final_tree %>%
   predict(train)
 
 resids <- train$n_eggs - tree_pred
-resid_plot <- tibble(resids, tree_pred)
+resid_plot <- tibble(resids, tree_pred, .name_repair = "unique")
 
 resid_plot %>%
-ggplot(aes(tree_pred, resids))+
-  geom_point()
+ggplot(aes(.pred...1, .pred...2))+
+  geom_point() +
+  labs(x="Predictions", y="Residuals")+
+  theme_bw()
+
+rpart.plot(extract_fit_parsnip(final_tree_fit)$fit)
+
+```
+
+#### LASSO Model
+
+```{r, warning=FALSE, message=FALSE}
+#LASSO model
+lasso_model <- linear_reg(penalty = tune(), mixture = 1) %>%
+  set_engine("glmnet") %>%
+  set_mode("regression")
+
+#LASSO workflow
+lasso_workflow <- workflow() %>%
+  add_model(lasso_model) %>%
+  add_formula(n_eggs ~ .)
+
+#create LASSO grid
+grid2 <- tibble(penalty=10^seq(-4,-1,length.out=30))
+
+grid2 %>% top_n(-5)
+grid2 %>% top_n(5)
+
+#LASSO fit
+lasso_fit <- lasso_workflow %>%
+  tune_grid(resamples = cv_folds,
+            grid = grid2,
+            control=control_grid(save_pred = TRUE),
+            metrics=metric_set(rmse))
+autoplot(lasso_fit)
 ```
 
